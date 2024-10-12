@@ -1,4 +1,4 @@
-.-- Function to set move name on the hotbar
+0-- Function to set move name on the hotbar
 local function setMoveName(moveNumber, moveName)
     local player = game.Players.LocalPlayer
     local playerGui = player.PlayerGui
@@ -77,4 +77,3 @@ setUltimateName("UltimateName")
 
 -- Animation for Ult Activation
 playMoveAnimation(12447707844, 17106858586, 1)  -- Ultimate Activation
-00
