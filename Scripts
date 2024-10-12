@@ -47,7 +47,7 @@ end
 -- Playing animations for each move
 playMoveAnimation(10468665991, 12618271998, 1.2)  -- Move 1
 playMoveAnimation(10466974800, 12460977270, 1)    -- Move 2
-playMoveAnimation(10471336737, 18717031831, 1)    -- Move 3
+playMoveAnimation(10471336737, 18716015787, 1)    -- Move 3
 playMoveAnimation(12510170988, 18179181663, 1)    -- Move 4
 
 -- Additional moves
