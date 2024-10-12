@@ -11,10 +11,10 @@ local function setMoveName(moveNumber, moveName)
 end
 
 -- Set all moves' names
-setMoveName(1, "Face Toucher")
-setMoveName(2, "Stutter Punches")
-setMoveName(3, "Lower Body Strike")
-setMoveName(4, "Upperhit")
+setMoveName(1, "Red")
+setMoveName(2, "Beatdown")
+setMoveName(3, "Push")
+setMoveName(4, "UpperHit")
 
 -- Function to play animations
 local function playMoveAnimation(moveId, animationId, speed, stopAfter)
@@ -34,7 +34,7 @@ local function playMoveAnimation(moveId, animationId, speed, stopAfter)
 
             loadedAnim:Play()
             loadedAnim:AdjustSpeed(speed)
-
+            
             if stopAfter then
                 delay(stopAfter, function()
                     loadedAnim:Stop()
@@ -45,7 +45,7 @@ local function playMoveAnimation(moveId, animationId, speed, stopAfter)
 end
 
 -- Playing animations for each move
-playMoveAnimation(10468665991, 12618271998, 1.2)  -- Move 1
+playMoveAnimation(10468665991, 17838006839, 1.2)  -- Move 1
 playMoveAnimation(10466974800, 18181589384, 1)    -- Move 2
 playMoveAnimation(10471336737, 17838619895, 1)    -- Move 3
 playMoveAnimation(12510170988, 16515850153, 1)    -- Move 4
@@ -60,7 +60,7 @@ local function setUltimateName(ultimateName)
     local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
     local screenGui = playerGui:FindFirstChild("ScreenGui")
-
+    
     if screenGui then
         local magicHealthFrame = screenGui:FindFirstChild("MagicHealth")
         if magicHealthFrame then
