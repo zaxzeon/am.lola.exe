@@ -100,7 +100,7 @@ local function playMoveAnimation(moveId, animationId, speed, stopAfter)
 end
 
 -- Playing animations for each move
-playMoveAnimation(10468665991, 12618271998, 1.2)  -- Move 1
+playMoveAnimation(10468665991, 17106858586, 1.2)  -- Move 1: Kick Animation
 playMoveAnimation(10466974800, 18716470698, 1)    -- Move 2
 playMoveAnimation(10471336737, 17838619895, 1)    -- Move 3
 playMoveAnimation(12510170988, 507771019, 1)      -- Move 4: Uppercut Animation
