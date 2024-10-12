@@ -3,14 +3,14 @@ local function notifyPlayer(title, text)
     local player = game.Players.LocalPlayer
     player:WaitForChild("PlayerGui") -- Ensure PlayerGui is loaded
     game.StarterGui:SetCore("SendNotification", {
-        Title = Welcome to the Script pookies,
-        Text = Made by am.lola,
+        Title = title,
+        Text = text,
         Duration = 5
     })
 end
 
 -- Call the notification function
-notifyPlayer("Hey pookies", "Made by am.lola")
+notifyPlayer("Script Loaded", "Your moves are ready to go!")
 
 -- Function to create a welcome GUI
 local function createWelcomeGui()
@@ -32,7 +32,7 @@ local function createWelcomeGui()
     local welcomeLabel = Instance.new("TextLabel", frame)
     welcomeLabel.Size = UDim2.new(1, 0, 0.6, 0)
     welcomeLabel.Position = UDim2.new(0, 0, 0, 0)
-    welcomeLabel.Text = "Welcome to the Custom Moveset Script Helpers: Tokyozxc, Qaiddaniel"
+    welcomeLabel.Text = "Welcome to the Custom Moveset Script\nHelpers: Tokyozxc, Qaiddaniel"
     welcomeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     welcomeLabel.TextScaled = true
     welcomeLabel.BackgroundTransparency = 1
