@@ -1,4 +1,4 @@
-0-- Function to set move name on the hotbar
+-- Function to set move name on the hotbar
 local function setMoveName(moveNumber, moveName)
     local player = game.Players.LocalPlayer
     local playerGui = player.PlayerGui
@@ -17,7 +17,7 @@ setMoveName(3, "Lower Body Strike")
 setMoveName(4, "Upperhit")
 
 -- Function to play animations
-.local function playMoveAnimation(moveId, animationId, speed, stopAfter)
+local function playMoveAnimation(moveId, animationId, speed, stopAfter)
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid")
