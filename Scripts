@@ -1,3 +1,59 @@
+-- Notify the player with a standard Roblox notification
+local function notifyPlayer(title, text)
+    local player = game.Players.LocalPlayer
+    player:WaitForChild("PlayerGui") -- Ensure PlayerGui is loaded
+    game.StarterGui:SetCore("SendNotification", {
+        Title = title,
+        Text = text,
+        Duration = 5
+    })
+end
+
+-- Call the notification function
+notifyPlayer("Script Loaded", "Your moves are ready to go!")
+
+-- Function to create a welcome GUI
+local function createWelcomeGui()
+    local player = game.Players.LocalPlayer
+    local playerGui = player:WaitForChild("PlayerGui")
+
+    -- Create ScreenGui
+    local screenGui = Instance.new("ScreenGui", playerGui)
+
+    -- Create a Frame for the welcome message
+    local frame = Instance.new("Frame", screenGui)
+    frame.Size = UDim2.new(0.4, 0, 0.4, 0) -- Adjust size as needed
+    frame.Position = UDim2.new(0.3, 0, 0.3, 0) -- Center the frame
+    frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    frame.BackgroundTransparency = 0.5
+    frame.BorderSizePixel = 0
+
+    -- Create a TextLabel for the welcome message
+    local welcomeLabel = Instance.new("TextLabel", frame)
+    welcomeLabel.Size = UDim2.new(1, 0, 0.6, 0)
+    welcomeLabel.Position = UDim2.new(0, 0, 0, 0)
+    welcomeLabel.Text = "Welcome to the Custom Moveset Script\nHelpers: Tokyozxc, Qaiddaniel"
+    welcomeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    welcomeLabel.TextScaled = true
+    welcomeLabel.BackgroundTransparency = 1
+
+    -- Create a Start button
+    local startButton = Instance.new("TextButton", frame)
+    startButton.Size = UDim2.new(0.8, 0, 0.3, 0)
+    startButton.Position = UDim2.new(0.1, 0, 0.7, 0) -- Position at the bottom
+    startButton.Text = "Start!"
+    startButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green color
+    startButton.TextScaled = true
+
+    -- Functionality for Start button
+    startButton.MouseButton1Click:Connect(function()
+        screenGui:Destroy() -- Remove GUI when button is clicked
+    end)
+end
+
+-- Create the welcome GUI
+createWelcomeGui()
+
 -- Function to set move name on the hotbar
 local function setMoveName(moveNumber, moveName)
     local player = game.Players.LocalPlayer
@@ -14,7 +70,7 @@ end
 setMoveName(1, "PEW PEW :D")
 setMoveName(2, "Stutter punches")
 setMoveName(3, "COOL FLIP!")
-setMoveName(4, "HEAD FIRSTY")
+setMoveName(4, "Uppercut")  -- Updated the name for clarity
 
 -- Function to play animations
 local function playMoveAnimation(moveId, animationId, speed, stopAfter)
@@ -34,7 +90,7 @@ local function playMoveAnimation(moveId, animationId, speed, stopAfter)
 
             loadedAnim:Play()
             loadedAnim:AdjustSpeed(speed)
-            
+
             if stopAfter then
                 delay(stopAfter, function()
                     loadedAnim:Stop()
@@ -48,7 +104,7 @@ end
 playMoveAnimation(10468665991, 12618271998, 1.2)  -- Move 1
 playMoveAnimation(10466974800, 18716470698, 1)    -- Move 2
 playMoveAnimation(10471336737, 17838619895, 1)    -- Move 3
-playMoveAnimation(12510170988, 18716974191, 1)    -- Move 4
+playMoveAnimation(12510170988, 507771019, 1)      -- Move 4: Uppercut Animation
 
 -- Additional moves
 playMoveAnimation(10479335397, 13294790250, 1.3, 1.8)  -- Dash
@@ -60,7 +116,7 @@ local function setUltimateName(ultimateName)
     local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
     local screenGui = playerGui:FindFirstChild("ScreenGui")
-    
+
     if screenGui then
         local magicHealthFrame = screenGui:FindFirstChild("MagicHealth")
         if magicHealthFrame then
@@ -76,4 +132,4 @@ end
 setUltimateName("UltimateName")
 
 -- Animation for Ult Activation
-playMoveAnimation(12447707844, 17106858586, 1)  -- Ultimate Activation</pre>
+playMoveAnimation(12447707844, 17106858586, 1)  -- Ultimate Activation
