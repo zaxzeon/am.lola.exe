@@ -66,9 +66,9 @@ local function setMoveName(moveNumber, moveName)
 end
 
 -- Set all moves' names
-setMoveName(1, "PEW PEW :D")
+setMoveName(1, "Thats on me Homie")
 setMoveName(2, "Stutter punches")
-setMoveName(3, "COOL FLIP!")
+setMoveName(3, "Kicky")
 setMoveName(4, "Uppercut")  -- Updated the name for clarity
 
 -- Function to play animations
@@ -102,7 +102,7 @@ end
 -- Playing animations for each move
 playMoveAnimation(10468665991, 17106858586, 1.2)  -- Move 1: Kick Animation
 playMoveAnimation(10466974800, 18716470698, 1)    -- Move 2
-playMoveAnimation(10471336737, 17838619895, 1)    -- Move 3
+playMoveAnimation(10471336737, 93056309217564, 1)    -- Move 3
 playMoveAnimation(12510170988, 507771019, 1)      -- Move 4: Uppercut Animation
 
 -- Additional moves
