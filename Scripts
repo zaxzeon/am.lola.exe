@@ -12,48 +12,6 @@ end
 -- Call the notification function
 notifyPlayer("Script Loaded", "Your moves are ready to go!")
 
--- Function to create a welcome GUI
-local function createWelcomeGui()
-    local player = game.Players.LocalPlayer
-    local playerGui = player:WaitForChild("PlayerGui")
-
-    -- Create ScreenGui
-    local screenGui = Instance.new("ScreenGui", playerGui)
-
-    -- Create a Frame for the welcome message
-    local frame = Instance.new("Frame", screenGui)
-    frame.Size = UDim2.new(0.4, 0, 0.4, 0) -- Adjust size as needed
-    frame.Position = UDim2.new(0.3, 0, 0.3, 0) -- Center the frame
-    frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    frame.BackgroundTransparency = 0.5
-    frame.BorderSizePixel = 0
-
-    -- Create a TextLabel for the welcome message
-    local welcomeLabel = Instance.new("TextLabel", frame)
-    welcomeLabel.Size = UDim2.new(1, 0, 0.6, 0)
-    welcomeLabel.Position = UDim2.new(0, 0, 0, 0)
-    welcomeLabel.Text = "Welcome to the Custom Moveset Script\nHelpers: Tokyozxc, Qaiddaniel"
-    welcomeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    welcomeLabel.TextScaled = true
-    welcomeLabel.BackgroundTransparency = 1
-
-    -- Create a Start button
-    local startButton = Instance.new("TextButton", frame)
-    startButton.Size = UDim2.new(0.8, 0, 0.3, 0)
-    startButton.Position = UDim2.new(0.1, 0, 0.7, 0) -- Position at the bottom
-    startButton.Text = "Start!"
-    startButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green color
-    startButton.TextScaled = true
-
-    -- Functionality for Start button
-    startButton.MouseButton1Click:Connect(function()
-        screenGui:Destroy() -- Remove GUI when button is clicked
-    end)
-end
-
--- Create the welcome GUI
-createWelcomeGui()
-
 -- Function to set move name on the hotbar
 local function setMoveName(moveNumber, moveName)
     local player = game.Players.LocalPlayer
