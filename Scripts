@@ -45,7 +45,7 @@ local function playMoveAnimation(moveId, animationId, speed, stopAfter)
 end
 
 -- Playing animations for each move
-playMoveAnimation(10468665991, 101860479621374, 1.2)  -- Move 1
+playMoveAnimation(10468665991, 12806327805, 1.2)  -- Move 1
 playMoveAnimation(10466974800, 18181589384, 1)    -- Move 2
 playMoveAnimation(10471336737, 17838619895, 1)    -- Move 3
 playMoveAnimation(12510170988, 16515850153, 1)    -- Move 4
