@@ -9,8 +9,49 @@ local function notifyPlayer(title, text)
     })
 end
 
--- Call the notification function
-notifyPlayer("Script Loaded", "Your moves are ready to go!")
+-- Function to create a welcome GUI
+local function createWelcomeGUI()
+    local player = game.Players.LocalPlayer
+    local playerGui = player:WaitForChild("PlayerGui")
+
+    -- Create ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "WelcomeScreen"
+    screenGui.Parent = playerGui
+
+    -- Create Frame
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0.5, 0, 0.5, 0)
+    frame.Position = UDim2.new(0.25, 0, 0.25, 0)
+    frame.BackgroundColor3 = Color3.new(1, 1, 1) -- White background
+    frame.Parent = screenGui
+
+    -- Create TextLabel
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(1, 0, 0.7, 0)
+    textLabel.Text = "Welcome to the Custom Moveset Script!\nHelpers: Tokyozxc, Qaid, and Luna\nCongratulations on owner Qaid!"
+    textLabel.TextColor3 = Color3.new(0, 0, 0) -- Black text
+    textLabel.BackgroundTransparency = 1 -- Transparent background
+    textLabel.Parent = frame
+
+    -- Create TextButton
+    local startButton = Instance.new("TextButton")
+    startButton.Size = UDim2.new(0.5, 0, 0.2, 0)
+    startButton.Position = UDim2.new(0.25, 0, 0.75, 0)
+    startButton.Text = "Start!"
+    startButton.BackgroundColor3 = Color3.new(0, 1, 0) -- Green background
+    startButton.TextColor3 = Color3.new(0, 0, 0) -- Black text
+    startButton.Parent = frame
+
+    -- Button click event
+    startButton.MouseButton1Click:Connect(function()
+        screenGui:Destroy() -- Remove the GUI when the button is clicked
+        notifyPlayer("Script Loaded", "Your moves are ready to go!") -- Notify player
+    end)
+end
+
+-- Call the function to create the GUI
+createWelcomeGUI()
 
 -- Function to set move name on the hotbar
 local function setMoveName(moveNumber, moveName)
