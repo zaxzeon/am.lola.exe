@@ -77,3 +77,29 @@ setUltimateName("Reverse Cursed Technique")
 
 -- Animation for Ult Activation
 playMoveAnimation(12447707844, 18778839005, 1)  -- Ultimate Activation
+
+-- Function to create and equip a tool
+local function createFlashStepTool()
+    local player = game.Players.LocalPlayer
+    local backpack = player:WaitForChild("Backpack")
+
+    -- Create the tool
+    local flashStepTool = Instance.new("Tool")
+    flashStepTool.Name = "Flash Step"
+    flashStepTool.RequiresHandle = true
+
+    -- Create the handle
+    local handle = Instance.new("Part")
+    handle.Name = "Handle"
+    handle.Size = Vector3.new(1, 1, 1)
+    handle.Anchored = false
+    handle.CanCollide = false
+    handle.BrickColor = BrickColor.new("Bright blue")  -- Change color if needed
+    handle.Parent = flashStepTool
+
+    -- Equip the tool
+    flashStepTool.Parent = backpack
+end
+
+-- Create and equip the Flash Step tool
+createFlashStepTool()
