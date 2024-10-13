@@ -1,0 +1,106 @@
+--[[ Template for Moves and Ultimate Names ]]
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+--[[ Hotbar Setup ]]
+local function setupHotbar()
+    local hotbar = playerGui:FindFirstChild("Hotbar")
+    local backpack = hotbar:FindFirstChild("Backpack")
+    local hotbarFrame = backpack:FindFirstChild("Hotbar")
+
+    -- Set Tool Names
+    local toolNames = {
+        "Time Rift",
+        "Ground Breaker",
+        "Chrono Kick",
+        "Temporal Repsiral"
+    }
+
+    for i, name in ipairs(toolNames) do
+        local baseButton = hotbarFrame:FindFirstChild(tostring(i)).Base
+        local ToolName = baseButton.ToolName
+        ToolName.Text = name
+    end
+end
+
+setupHotbar()
+
+--[[ Function to Set Text in UI ]]
+local function findGuiAndSetText()
+    local screenGui = playerGui:FindFirstChild("ScreenGui")
+    if screenGui then
+        local magicHealthFrame = screenGui:FindFirstChild("MagicHealth")
+        if magicHealthFrame then
+            local textLabel = magicHealthFrame:FindFirstChild("TextLabel")
+            if textLabel then
+                textLabel.Text = "YOUR TEXT HERE"
+            end
+        end
+    end
+end
+
+playerGui.DescendantAdded:Connect(findGuiAndSetText)
+findGuiAndSetText()
+
+--[[ Animation Function ]]
+local function playAnimation(animationId, newAnimationId, startTime, speed)
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+
+    local function onAnimationPlayed(animationTrack)
+        if animationTrack.Animation.AnimationId == "rbxassetid://" .. animationId then
+            for _, animTrack in pairs(humanoid:GetPlayingAnimationTracks()) do
+                animTrack:Stop()
+            end
+
+            local AnimAnim = Instance.new("Animation")
+            AnimAnim.AnimationId = "rbxassetid://" .. newAnimationId
+            local Anim = humanoid:LoadAnimation(AnimAnim)
+
+            Anim:Play()
+            Anim:AdjustSpeed(speed)
+            Anim.TimePosition = startTime
+        end
+    end
+
+    humanoid.AnimationPlayed:Connect(onAnimationPlayed)
+end
+
+--[[ Example Usage of Animation Function ]]
+playAnimation(10468665991, 17838006839, 0, 0.9) -- Replace IDs as needed
+-- Add more calls for different animations here
+
+--[[ Function for Player Movement ]]
+local function movePlayer()
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    local moving = false
+    local movementSpeed = 100
+
+    local function moveForward()
+        while moving do
+            local forwardDirection = humanoidRootPart.CFrame.LookVector
+            humanoidRootPart.Velocity = forwardDirection * movementSpeed
+            wait() -- Use RunService.Stepped if needed
+        end
+    end
+
+    -- Tool Equipped / Unequipped
+    local tool = Instance.new("Tool")
+    tool.Name = "Your Tool Name"
+    tool.Parent = player.Backpack
+
+    tool.Equipped:Connect(function()
+        moving = true
+        moveForward()
+    end)
+
+    tool.Unequipped:Connect(function()
+        moving = false
+    end)
+end
+
+movePlayer()
