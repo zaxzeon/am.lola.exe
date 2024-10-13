@@ -16,6 +16,51 @@ setMoveName(2, "Beatdown")
 setMoveName(3, "Push")
 setMoveName(4, "UpperHit")
 
+-- Function to create VFX
+local function createVFX(character)
+    -- Create the ball
+    local ball = Instance.new("Part")
+    ball.Size = Vector3.new(1, 1, 1)  -- Size of the ball
+    ball.Shape = Enum.PartType.Ball
+    ball.Material = Enum.Material.Neon
+    ball.BrickColor = BrickColor.new("Bright red")
+    ball.Position = character.RightHand.Position
+    ball.Anchored = true
+    ball.CanCollide = false
+    ball.Parent = workspace
+
+    -- Create a pole
+    local pole = Instance.new("Part")
+    pole.Size = Vector3.new(0.2, 3, 0.2)  -- Size of the pole
+    pole.Material = Enum.Material.Neon
+    pole.BrickColor = BrickColor.new("Bright red")
+    pole.Anchored = true
+    pole.CanCollide = false
+    pole.Position = character.RightHand.Position
+    pole.Parent = workspace
+
+    return ball, pole
+end
+
+-- Function to animate VFX
+local function animateVFX(ball, pole)
+    ball.Transparency = 0  -- Make the ball visible
+    pole.Transparency = 1   -- Start with the pole invisible
+
+    -- Animate the ball
+    local tweenService = game:GetService("TweenService")
+    local ballTween = tweenService:Create(ball, TweenInfo.new(1.2), {Size = Vector3.new(0.5, 0.5, 0.5), Position = ball.Position + Vector3.new(0, 2, 0), Transparency = 1})
+    
+    ballTween:Play()
+    
+    ballTween.Completed:Connect(function()
+        pole.Position = ball.Position  -- Position the pole where the ball was
+        pole.Transparency = 0  -- Make the pole visible
+        ball:Destroy()         -- Remove the ball
+        pole:Destroy()         -- Optionally remove the pole after some time if desired
+    end)
+end
+
 -- Function to play animations
 local function playMoveAnimation(moveId, animationId, speed, stopAfter)
     local player = game.Players.LocalPlayer
@@ -34,6 +79,12 @@ local function playMoveAnimation(moveId, animationId, speed, stopAfter)
 
             loadedAnim:Play()
             loadedAnim:AdjustSpeed(speed)
+
+            -- Create and animate the VFX for Move 1
+            if moveId == 10468665991 then  -- Check if it's Move 1
+                local ball, pole = createVFX(character)
+                animateVFX(ball, pole)
+            end
             
             if stopAfter then
                 delay(stopAfter, function()
