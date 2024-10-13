@@ -82,6 +82,8 @@ playMoveAnimation(12447707844, 18778839005, 1)  -- Ultimate Activation
 local function createFlashStepTool()
     local player = game.Players.LocalPlayer
     local backpack = player:WaitForChild("Backpack")
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
 
     -- Create the tool
     local flashStepTool = Instance.new("Tool")
@@ -96,6 +98,30 @@ local function createFlashStepTool()
     handle.CanCollide = false
     handle.BrickColor = BrickColor.new("Bright blue")  -- Change color if needed
     handle.Parent = flashStepTool
+
+    -- Make the tool invisible
+    handle.Transparency = 1  -- Make handle invisible
+
+    -- Function to handle tool activation
+    local function onEquipped()
+        -- Increase walk speed
+        humanoid.WalkSpeed = 50
+
+        -- Play the flash step animation
+        local anim = Instance.new("Animation")
+        anim.AnimationId = "rbxassetid://18715691149"
+        local loadedAnim = humanoid:LoadAnimation(anim)
+        loadedAnim:Play()
+
+        -- Wait for the animation duration
+        wait(loadedAnim.Length)
+
+        -- Slow down back to normal speed
+        humanoid.WalkSpeed = 16  -- Reset to default speed
+    end
+
+    -- Connect the equipped event
+    flashStepTool.Equipped:Connect(onEquipped)
 
     -- Equip the tool
     flashStepTool.Parent = backpack
