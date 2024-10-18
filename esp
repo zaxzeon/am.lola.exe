@@ -1,0 +1,79 @@
+-- Get necessary services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+
+-- Function to create an ESP for a player
+local function createESP(player)
+	-- Create a Highlight instance
+	local highlight = Instance.new("Highlight")
+	highlight.Adornee = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	highlight.FillColor = Color3.new(1, 0, 0) -- Red color
+	highlight.FillTransparency = 0.5 -- Semi-transparent
+	highlight.Enabled = true
+
+	-- Create a BillboardGui for the username
+	local billboardGui = Instance.new("BillboardGui")
+	billboardGui.Adornee = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	billboardGui.Size = UDim2.new(1, 0, 1, 0)
+	billboardGui.StudsOffset = Vector3.new(0, 3, 0) -- Position above the player
+
+	local textLabel = Instance.new("TextLabel")
+	textLabel.Size = UDim2.new(1, 0, 1, 0)
+	textLabel.BackgroundTransparency = 1
+	textLabel.Text = player.Name
+	textLabel.TextColor3 = Color3.new(1, 1, 1) -- White text
+	textLabel.TextScaled = true -- Scale text to fit
+	textLabel.Parent = billboardGui
+
+	billboardGui.Parent = Workspace -- Attach BillboardGui to Workspace
+	highlight.Parent = Workspace -- Attach Highlight to Workspace
+end
+
+-- Function to remove ESP for a player
+local function removeESP(player)
+	if player.Character then
+		local highlight = player.Character:FindFirstChild("Highlight")
+		if highlight then
+			highlight:Destroy() -- Remove Highlight
+		end
+	end
+
+	local billboardGui = Workspace:FindFirstChild(player.Name .. "_BillboardGui")
+	if billboardGui then
+		billboardGui:Destroy() -- Remove BillboardGui
+	end
+end
+
+-- Update ESP when players join or respawn
+local function onPlayerAdded(player)
+	player.CharacterAdded:Connect(function()
+		wait(0.1) -- Ensure character is fully loaded
+		createESP(player)
+	end)
+end
+
+-- Initialize ESP for existing players
+for _, player in ipairs(Players:GetPlayers()) do
+	onPlayerAdded(player)
+end
+
+-- Connect to PlayerAdded event
+Players.PlayerAdded:Connect(onPlayerAdded)
+
+-- Clean up when a player leaves
+Players.PlayerRemoving:Connect(function(player)
+	removeESP(player)
+end)
+
+-- Update ESP continuously for players in the game
+RunService.RenderStepped:Connect(function()
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+			local highlight = Workspace:FindFirstChild(player.Name .. "_Highlight")
+			if highlight then
+				highlight.Adornee = player.Character.HumanoidRootPart -- Update Adornee
+			end
+		end
+	end
+end)
