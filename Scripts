@@ -320,7 +320,72 @@ Anim:AdjustSpeed(0.9)
 
 
     end
-    
+    local player = game.Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+
+local orbActive = false -- Flag to check if the orb is already active
+
+local function createRedOrb(character)
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- Adjust humanoid properties for smoother movement
+    humanoid.WalkSpeed = 16 -- Adjust as needed
+    humanoid.JumpPower = 50 -- Adjust jump height if needed
+
+    local function spawnRedOrb()
+        local objects = game:GetObjects("rbxassetid://123913192872790")[1] -- Replace with your actual Asset ID
+
+        local redOrb = objects:FindFirstChild("Red Orb")
+        if not redOrb then
+            warn("Red Orb not found in the model!")
+            return
+        end
+
+        redOrb.Parent = workspace
+        redOrb.Anchored = false -- Allow it to move
+        redOrb.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 5, 5) -- Position above the player
+
+        -- Enable effects on the Red Orb
+        local function enableEffects(model)
+            for _, obj in pairs(model:GetDescendants()) do
+                if obj:IsA("ParticleEmitter") or obj:IsA("Beam") then
+                    obj.Enabled = true
+                end
+            end
+        end
+
+        enableEffects(redOrb)
+
+        -- Make the orb follow the player
+        while orbActive do
+            wait(0.1) -- Adjust follow speed if needed
+            redOrb.Position = humanoidRootPart.Position + Vector3.new(0, 5, 5) -- Adjust position as needed
+        end
+
+        -- Optionally wait before destroying
+        wait(2) -- Time before it disappears
+        redOrb:Destroy() -- Destroy the orb after a delay
+    end
+
+    if not orbActive then
+        orbActive = true -- Set the flag to active
+        spawnRedOrb() -- Spawn the orb
+    end
+end
+
+local function onCharacterAdded(character)
+    createRedOrb(character)
+end
+
+-- Connect to the Player's CharacterAdded event
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Ensure the script runs on the current character if already loaded
+if player.Character then
+    onCharacterAdded(player.Character)
+end
+
 end
 
 --[[END OF MOVE 1 ANIM]]
