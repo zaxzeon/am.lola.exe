@@ -359,6 +359,80 @@ delay(10, function()
 
 end)
 
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+
+-- Wait for the player to load
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Find the "Right Arm" part inside the player's character
+local rightArm = character:WaitForChild("Right Arm")
+if not rightArm then
+    error("Right Arm part not found in player character")
+end
+
+-- Check for Resources folder in ReplicatedStorage
+local resourcesFolder = ReplicatedStorage:WaitForChild("Resources")
+
+-- Check for KJEffects folder inside Resources
+local kjEffectsFolder = resourcesFolder:WaitForChild("KJEffects")
+
+-- Check for speedlinesandstuff part inside KJEffects
+local speedlinesandstuffPart = kjEffectsFolder:WaitForChild("barrage")
+
+-- Duplicate the speedlinesandstuff part
+local speedlinesandstuffClone = speedlinesandstuffPart:Clone()
+
+-- Put the duplicate in Workspace
+speedlinesandstuffClone.Parent = Workspace
+
+-- Set the position to the Right Arm initially
+speedlinesandstuffClone.CFrame = rightArm.CFrame
+
+-- Function to enable all ParticleEmitters
+local function enableParticleEmitters(parent)
+    for _, descendant in ipairs(parent:GetDescendants()) do
+        if descendant:IsA("ParticleEmitter") then
+            descendant.Enabled = true
+        end
+    end
+end
+
+-- Update the clone's position every frame
+RunService.RenderStepped:Connect(function()
+    if character and rightArm then
+        speedlinesandstuffClone.CFrame = rightArm.CFrame
+    end
+end)
+
+-- Example usage after your dash effect completes
+spawn(function()
+    -- Simulating end of dash effect
+    wait(0)  -- Adjust the wait time as needed
+
+    -- Enable all ParticleEmitters inside speedlinesandstuffClone
+    enableParticleEmitters(speedlinesandstuffClone)
+end)
+wait(1.2)
+workspace.barrage:Destroy()
+local hit1 = game.ReplicatedStorage.Resources.KJEffects["HitParticles"].Hit:Clone()
+    hit1.Parent = game.Players.LocalPlayer.Character["Right Arm"]
+        for _, child in ipairs(hit1:GetChildren()) do
+            if child:IsA("ParticleEmitter") then -- Check if the child is a ParticleEmitter
+                child:Emit(8) -- Emit 20 particles
+            end
+        end
+local hit1 = game.ReplicatedStorage.Resources.KJEffects["RUNAROUNDWIND"].RUNAROUNDWIND:Clone()
+hit1.Parent = game.Players.LocalPlayer.Character["HumanoidRootPart"]
+    for _, child in ipairs(hit1:GetChildren()) do
+        if child:IsA("ParticleEmitter") then -- Check if the child is a ParticleEmitter
+            child:Emit(5) -- Emit 20 particles
+        end
+    end
+wait(0.7)
 
     end
 
