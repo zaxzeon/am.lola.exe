@@ -158,6 +158,67 @@ Anim.TimePosition = startTime
 Anim:AdjustSpeed(0.9)
 
 
+delay(10, function()
+
+    Anim:Stop()
+
+end)
+
+local player = game.Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+
+local function activateRedOrb(character)
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local humanoid = character:WaitForChild("Humanoid")
+    
+    -- Adjust humanoid properties for smoother movement
+    humanoid.WalkSpeed = 16 -- Adjust as needed
+    humanoid.JumpPower = 50 -- Adjust jump height if needed
+
+    coroutine.wrap(function()
+        local objects = game:GetObjects("rbxassetid://123913192872790")[1] -- Replace with your actual Asset ID
+        
+        local redOrb = objects:FindFirstChild("Red Orb")
+        if not redOrb then
+            warn("Red Orb not found in the model!")
+            return
+        end
+
+        redOrb.Parent = workspace
+        redOrb.Anchored = true
+        redOrb.CFrame = humanoidRootPart.CFrame * CFrame.new(-5, 0, 5)  -- Adjust position as needed
+
+        -- Enable effects on the Red Orb
+        local function enableEffects(model)
+            for _, obj in pairs(model:GetDescendants()) do
+                if obj:IsA("ParticleEmitter") or obj:IsA("Beam") then
+                    obj.Enabled = true
+                end
+            end
+        end
+
+        enableEffects(redOrb)
+
+        -- Optional: Move the orb if needed
+        wait(1.5) -- Wait time before moving (adjust as needed)
+
+        -- Destroy the orb after a delay
+        wait(5) -- Adjust the time before destroying the orb
+        redOrb:Destroy()
+    end)()
+end
+
+local function onCharacterAdded(character)
+    activateRedOrb(character)
+end
+
+-- Connect to the Player's CharacterAdded event
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Ensure the script runs on the current character if already loaded
+if player.Character then
+    onCharacterAdded(player.Character)
+end
     end
 
 end
@@ -360,61 +421,6 @@ delay(10, function()
 
 end)
 
-local player = game.Players.LocalPlayer
-local TweenService = game:GetService("TweenService")
-
-local function activateRedOrb(character)
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    local humanoid = character:WaitForChild("Humanoid")
-    
-    -- Adjust humanoid properties for smoother movement
-    humanoid.WalkSpeed = 16 -- Adjust as needed
-    humanoid.JumpPower = 50 -- Adjust jump height if needed
-
-    coroutine.wrap(function()
-        local objects = game:GetObjects("rbxassetid://123913192872790")[1] -- Replace with your actual Asset ID
-        
-        local redOrb = objects:FindFirstChild("Red Orb")
-        if not redOrb then
-            warn("Red Orb not found in the model!")
-            return
-        end
-
-        redOrb.Parent = workspace
-        redOrb.Anchored = true
-        redOrb.CFrame = humanoidRootPart.CFrame * CFrame.new(-5, 0, 5)  -- Adjust position as needed
-
-        -- Enable effects on the Red Orb
-        local function enableEffects(model)
-            for _, obj in pairs(model:GetDescendants()) do
-                if obj:IsA("ParticleEmitter") or obj:IsA("Beam") then
-                    obj.Enabled = true
-                end
-            end
-        end
-
-        enableEffects(redOrb)
-
-        -- Optional: Move the orb if needed
-        wait(1.5) -- Wait time before moving (adjust as needed)
-
-        -- Destroy the orb after a delay
-        wait(5) -- Adjust the time before destroying the orb
-        redOrb:Destroy()
-    end)()
-end
-
-local function onCharacterAdded(character)
-    activateRedOrb(character)
-end
-
--- Connect to the Player's CharacterAdded event
-player.CharacterAdded:Connect(onCharacterAdded)
-
--- Ensure the script runs on the current character if already loaded
-if player.Character then
-    onCharacterAdded(player.Character)
-end
     end
 
 end
