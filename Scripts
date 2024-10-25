@@ -87,9 +87,6 @@ local function findGuiAndSetText()
 
         local magicHealthFrame = screenGui:FindFirstChild("MagicHealth")
 
-        if magicHealthFrame then
-magicHealthFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
-
             local textLabel = magicHealthFrame:FindFirstChild("TextLabel")
 
             if textLabel then
@@ -97,17 +94,16 @@ magicHealthFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
                 local random = math.random(1, 100)
                 
                 if random <= 60 then
-                    textLabel.Text = "Throughout Heaven and Earth, I alone am the honored one."
+                    textLabel.Text = "I alone am the strongest."
                 elseif random <= 80 then
-                    textLabel.Text = "You're strong... That's why I'll kill you."
+                    textLabel.Text = "You're strong. I'll kill you."
                 elseif random <= 90 then
-                    textLabel.Text = "The only one who can beat me is me."
+                    textLabel.Text = "Only I can beat me."
                 elseif random <= 95 then
-                    textLabel.Text = "Don't worry, I'm the strongest."
+                    textLabel.Text = "I'm the strongest."
                 else
-                    textLabel.Text = "Hollow Purple... That was fun, wasn't it?"
+                    textLabel.Text = "Hollow Purple."
                 end
-
             end
 
         end
@@ -176,6 +172,11 @@ delay(10, function()
     Anim:Stop()
 
 end)
+
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://18169340129"
+sound.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+sound:Play()
 
 local boom1 = game.ReplicatedStorage.Resources.KJEffects["SpinningSmoke"].Smoke:Clone()
 boom1.Parent = game.Players.LocalPlayer.Character["Torso"]
