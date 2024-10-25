@@ -679,7 +679,7 @@ end
 
 local AnimAnim = Instance.new("Animation")
 
-AnimAnim.AnimationId = "rbxassetid://17106858586 "
+AnimAnim.AnimationId = "rbxassetid://18716028410"
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
@@ -1040,35 +1040,6 @@ local function onBodyVelocityAdded(bodyVelocity)
 
 end
 
-local tool = Instance.new("Tool")
-tool.Name = "Power Up"
-tool.Parent = game.Players.LocalPlayer.Backpack
-
-local function onActivated()
-    -- Create multiple VFX effects for more impact
-    local effects = {
-        game.ReplicatedStorage.Resources.FiveSeasonsFX["CharFX"].EyeEmit,
-        game.ReplicatedStorage.Resources.KJEffects["SpinningSmoke"].Smoke,
-        game.ReplicatedStorage.Resources.KJEffects["fine...Emit"].EmitBatch2
-    }
-    
-    -- Apply each effect
-    for _, effectTemplate in ipairs(effects) do
-        local effect = effectTemplate:Clone()
-        effect.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
-        
-        for _, child in ipairs(effect:GetChildren()) do
-            if child:IsA("ParticleEmitter") then
-                child:Emit(30)
-            end
-        end
-        
-        -- Clean up effect after 2 seconds
-        game:GetService("Debris"):AddItem(effect, 2)
-    end
-end
-
-tool.Activated:Connect(onActivated)
 
 character.DescendantAdded:Connect(onBodyVelocityAdded)
 
@@ -1096,4 +1067,31 @@ player.CharacterAdded:Connect(function(newCharacter)
 
     end
 
-end) 
+local tool = Instance.new("Tool")
+tool.Name = "Power Up"
+tool.Parent = player.Backpack
+
+local function onActivated()
+    local function stringToCFrame(str)
+        local components = {str:match("([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+)")}
+        for i = 1, #components do
+            components[i] = tonumber(components[i])
+        end
+        return CFrame.new(unpack(components))
+    end
+
+    local blueColor = ColorSequence.new(Color3.fromRGB(0, 0, 255))
+    local red4 = game.ReplicatedStorage.Resources.FiveSeasonsFX["CharFX"].EyeEmit:Clone()
+    red4.Parent = game.Players.LocalPlayer.Character["Head"]
+    
+    for _, child in ipairs(red4:GetChildren()) do
+        if child:IsA("ParticleEmitter") then
+            child.Color = blueColor
+            child:Emit(20)
+        end
+    end
+end
+
+tool.Activated:Connect(onActivated)
+
+end)
