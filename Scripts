@@ -72,17 +72,6 @@ local ToolName = baseButton.ToolName
 ToolName.Text = "Limitless Uppercut"
 
 
-local player = game.Players.LocalPlayer
-local playerGui = player.PlayerGui
-local hotbar = playerGui:FindFirstChild("Hotbar")
-local backpack = hotbar:FindFirstChild("Backpack")
-local hotbarFrame = backpack:FindFirstChild("Hotbar")
-local baseButton = hotbarFrame:FindFirstChild("5").Base
-local ToolName = baseButton.ToolName
-
-ToolName.Text = "Domain Expansion: Infinite Void"
-
-
 local Players = game:GetService("Players")
 
 local player = Players.LocalPlayer
@@ -602,36 +591,6 @@ end
 
 --[[END OF MOVE 4 ANIM]]
 
---[[Move 5]]
-
-humanoid.AnimationPlayed:Connect(onAnimationPlayed)
-
-local animationId = 12510171988  -- Using a unique animation ID
-
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-local function onAnimationPlayed(animationTrack)
-    if animationTrack.Animation.AnimationId == "rbxassetid://" .. animationId then
-        local p = game.Players.LocalPlayer
-        local Humanoid = p.Character:WaitForChild("Humanoid")
-
-        for _, animTrack in pairs(Humanoid:GetPlayingAnimationTracks()) do
-            animTrack:Stop()
-        end
-
-        local wow1 = game.ReplicatedStorage.Resources.Dragon["Complete"].Part.Debri:Clone()
-        wow1.Parent = game.Players.LocalPlayer.Character["Torso"]
-        for _, child in ipairs(wow1:GetChildren()) do
-            if child:IsA("ParticleEmitter") then
-                child:Emit(20)
-            end
-        end
-    end
-end
---[[END OF MOVE 5 ANIM]]
-
 --[[Wall combo]]
 
 humanoid.AnimationPlayed:Connect(onAnimationPlayed)
@@ -1091,6 +1050,22 @@ for _, descendant in pairs(character:GetDescendants()) do
 
 end
 
+local tool = Instance.new("Tool")
+tool.Name = "Domain Expansion"
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local function onActivated()
+    local wow1 = game.ReplicatedStorage.Resources.Dragon["Complete"].Part.Debri:Clone()
+    wow1.Parent = game.Players.LocalPlayer.Character["Torso"]
+    
+    for _, child in ipairs(wow1:GetChildren()) do
+        if child:IsA("ParticleEmitter") then
+            child:Emit(20)
+        end
+    end
+end
+
+tool.Activated:Connect(onActivated)
 
 player.CharacterAdded:Connect(function(newCharacter)
 
