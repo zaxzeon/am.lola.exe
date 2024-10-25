@@ -87,9 +87,6 @@ local function findGuiAndSetText()
 
         local magicHealthFrame = screenGui:FindFirstChild("MagicHealth")
 
-        if magicHealthFrame then
-magicHealthFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
-
             local textLabel = magicHealthFrame:FindFirstChild("TextLabel")
 
             if textLabel then
@@ -174,11 +171,6 @@ Anim:AdjustSpeed(0.9)
       Anim:Stop()
 
   end)
-
-  local sound = Instance.new("Sound")
-  sound.SoundId = "rbxassetid://18169340129"
-  sound.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
-  sound:Play()
 
   local boom1 = game.ReplicatedStorage.Resources.KJEffects["SpinningSmoke"].Smoke:Clone()
   boom1.Parent = game.Players.LocalPlayer.Character["Torso"]
