@@ -1040,6 +1040,33 @@ local function onBodyVelocityAdded(bodyVelocity)
 
 end
 
+local tool = Instance.new("Tool")
+tool.Name = "Power Up"
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local function onActivated()
+    local function stringToCFrame(str)
+        local components = {str:match("([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+)")}
+        for i = 1, #components do
+            components[i] = tonumber(components[i])
+        end
+        return CFrame.new(unpack(components))
+    end
+
+    local blueColor = ColorSequence.new(Color3.fromRGB(0, 0, 255))
+
+    local red4 = game.ReplicatedStorage.Resources.FiveSeasonsFX["CharFX"].EyeEmit:Clone()
+    red4.Parent = game.Players.LocalPlayer.Character["Head"]
+    
+    for _, child in ipairs(red4:GetChildren()) do
+        if child:IsA("ParticleEmitter") then
+            child.Color = blueColor
+            child:Emit(20)
+        end
+    end
+end
+
+tool.Activated:Connect(onActivated)
 
 character.DescendantAdded:Connect(onBodyVelocityAdded)
 
@@ -1050,22 +1077,6 @@ for _, descendant in pairs(character:GetDescendants()) do
 
 end
 
-local tool = Instance.new("Tool")
-tool.Name = "Domain Expansion"
-tool.Parent = game.Players.LocalPlayer.Backpack
-
-local function onActivated()
-    local wow1 = game.ReplicatedStorage.Resources.Dragon["Complete"].Part.Debri:Clone()
-    wow1.Parent = game.Players.LocalPlayer.Character["Torso"]
-    
-    for _, child in ipairs(wow1:GetChildren()) do
-        if child:IsA("ParticleEmitter") then
-            child:Emit(20)
-        end
-    end
-end
-
-tool.Activated:Connect(onActivated)
 
 player.CharacterAdded:Connect(function(newCharacter)
 
