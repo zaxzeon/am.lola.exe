@@ -88,12 +88,25 @@ local function findGuiAndSetText()
         local magicHealthFrame = screenGui:FindFirstChild("MagicHealth")
 
         if magicHealthFrame then
+magicHealthFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
 
             local textLabel = magicHealthFrame:FindFirstChild("TextLabel")
 
             if textLabel then
 
-                textLabel.Text = "UltimateName"
+                local random = math.random(1, 100)
+                
+                if random <= 60 then
+                    textLabel.Text = "Throughout Heaven and Earth, I alone am the honored one."
+                elseif random <= 80 then
+                    textLabel.Text = "You're strong... That's why I'll kill you."
+                elseif random <= 90 then
+                    textLabel.Text = "The only one who can beat me is me."
+                elseif random <= 95 then
+                    textLabel.Text = "Don't worry, I'm the strongest."
+                else
+                    textLabel.Text = "Hollow Purple... That was fun, wasn't it?"
+                end
 
             end
 
@@ -1066,32 +1079,5 @@ player.CharacterAdded:Connect(function(newCharacter)
         onBodyVelocityAdded(descendant)
 
     end
-
-local tool = Instance.new("Tool")
-tool.Name = "Power Up"
-tool.Parent = player.Backpack
-
-local function onActivated()
-    local function stringToCFrame(str)
-        local components = {str:match("([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+)")}
-        for i = 1, #components do
-            components[i] = tonumber(components[i])
-        end
-        return CFrame.new(unpack(components))
-    end
-
-    local blueColor = ColorSequence.new(Color3.fromRGB(0, 0, 255))
-    local red4 = game.ReplicatedStorage.Resources.FiveSeasonsFX["CharFX"].EyeEmit:Clone()
-    red4.Parent = game.Players.LocalPlayer.Character["Head"]
-    
-    for _, child in ipairs(red4:GetChildren()) do
-        if child:IsA("ParticleEmitter") then
-            child.Color = blueColor
-            child:Emit(20)
-        end
-    end
-end
-
-tool.Activated:Connect(onActivated)
 
 end)
