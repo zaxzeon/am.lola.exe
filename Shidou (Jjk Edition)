@@ -853,59 +853,70 @@ player.CharacterAdded:Connect(function(newCharacter)
     end
 
 end) 
+      -- Create a new tool
+      local tool = Instance.new("Tool")
+      tool.Name = "Power up"
+      tool.RequiresHandle = false
 
-    -- Create a new tool
-    local tool = Instance.new("Tool")
-    tool.Name = "Power up"
-    tool.RequiresHandle = false
+      -- Tool functionality
+      local function onActivated()
+          local assetId = 14675208667
+          local effect = game:GetObjects("rbxassetid://" .. assetId)[1]
 
-    -- Tool functionality
-    local function onActivated()
-        local assetId = 14675208667
-        local effect = game:GetObjects("rbxassetid://" .. assetId)[1]
+          if effect then
+              local player = game.Players.LocalPlayer
+              local character = player.Character or player.CharacterAdded:Wait()
+              local rightLeg = character:FindFirstChild("RightFoot") or character:FindFirstChild("Right Leg")
+              local leftLeg = character:FindFirstChild("LeftFoot") or character:FindFirstChild("Left Leg")
+              local humanoid = character:FindFirstChildOfClass("Humanoid")
 
-        if effect then
-            local player = game.Players.LocalPlayer
-            local character = player.Character or player.CharacterAdded:Wait()
-            local rightLeg = character:FindFirstChild("RightFoot") or character:FindFirstChild("Right Leg")
-            local leftLeg = character:FindFirstChild("LeftFoot") or character:FindFirstChild("Left Leg")
-            local humanoid = character:FindFirstChildOfClass("Humanoid")
+              -- Check if legs and humanoid exist
+              if rightLeg and leftLeg and humanoid then
+                  effect.PrimaryPart = effect:FindFirstChildWhichIsA("BasePart")
 
-            effect.PrimaryPart = effect:FindFirstChildWhichIsA("BasePart")
+                  -- Make effects purple
+                  for _, part in pairs(effect:GetDescendants()) do
+                      if part:IsA("BasePart") or part:IsA("ParticleEmitter") then
+                          part.Color = Color3.fromRGB(170, 0, 255)
+                      end
+                  end
 
-            -- Make effects purple
-            for _, part in pairs(effect:GetDescendants()) do
-                if part:IsA("BasePart") or part:IsA("ParticleEmitter") then
-                    part.Color = Color3.fromRGB(170, 0, 255)
-                end
-            end
+                  local function spawnEffect(leg)
+                      if leg then
+                          local legEffect = effect:Clone()
+                          legEffect.Parent = leg
+                          legEffect:SetPrimaryPartCFrame(leg.CFrame)
+                          for _, part in pairs(legEffect:GetDescendants()) do
+                              if part:IsA("BasePart") then
+                                  part.CanCollide = false
+                              end
+                          end
 
-            local function spawnEffect(leg)
-                if leg then
-                    local legEffect = effect:Clone()
-                    legEffect.Parent = leg
-                    legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
-                    for _, part in pairs(legEffect:GetDescendants()) do
-                        if part:IsA("BasePart") then
-                            part.CanCollide = false
-                        end
-                    end
+                          local function updateEffectPosition()
+                              if legEffect and legEffect.PrimaryPart then
+                                  legEffect:SetPrimaryPartCFrame(leg.CFrame)
+                              else
+                                  legEffect:Destroy() -- Clean up if legEffect is no longer valid
+                              end
+                          end
 
-                    local function updateEffectPosition()
-                        legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
-                    end
+                          game:GetService("RunService").Heartbeat:Connect(updateEffectPosition)
+                      end
+                  end
 
-                    game:GetService("RunService").Heartbeat:Connect(updateEffectPosition)
-                end
-            end
+                  -- Directly call spawnEffect for both legs
+                  spawnEffect(rightLeg)
+                  spawnEffect(leftLeg)
+              else
+                  warn("Character legs or humanoid not found.")
+              end
+          else
+              warn("Effect could not be loaded.")
+          end
+      end
 
-            -- Directly call spawnEffect for both legs
-            spawnEffect(rightLeg)
-            spawnEffect(leftLeg)
-        end
-    end
+      tool.Activated:Connect(onActivated)
 
-    tool.Activated:Connect(onActivated)
-
-    -- Give the tool to the player's backpack
-    tool.Parent = player.Backpack
+      -- Give the tool to the player's backpack
+      local player = game.Players.LocalPlayer
+      tool.Parent = player.Backpack
