@@ -864,55 +864,45 @@ handle.Name = "Handle"
 handle.Transparency = 1
 handle.CanCollide = false
 handle.Parent = tool
+  
+local assetId = 14675208667
+  local effect = game:GetObjects("rbxassetid://" .. assetId)[1]
+    if effect then
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local leftLeg = character:FindFirstChild("LeftFoot") or character:FindFirstChild("Left Leg")
+        local rightLeg = character:FindFirstChild("RightFoot") or character:FindFirstChild("Right Leg")
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
 
-local soundId = "rbxassetid://18181263808" -- Sound ID (must be a valid sound ID)
-local sound = Instance.new("Sound")
-sound.SoundId = soundId
-sound.Parent = tool
+        effect.PrimaryPart = effect:FindFirstChildWhichIsA("BasePart")
 
-local animationId = "rbxassetid://18435383478" -- Animation ID (must be a valid animation ID)
+        local function spawnEffect(leg)
+            if leg then
+                local legEffect = effect:Clone()
+                legEffect.Parent = leg
+                legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
+                for _, part in pairs(legEffect:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                        part.Color = Color3.fromRGB(170, 0, 255) -- Purple color
+                    end
+                    if part:IsA("ParticleEmitter") then
+                        part.Color = ColorSequence.new(Color3.fromRGB(170, 0, 255)) -- Purple color for particles
+                    end
+                end
 
-local cooldownTime = 0 -- Cooldown time in seconds
-local canUseTool = true -- Flag to check if the tool can be used
+                local function updateEffectPosition()
+                    legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
+                end
 
-local function onEquipped()
-    if not canUseTool then
-        print("COOLDOWN") -- Print the cooldown text
-        return
-    end
-
-    local character = game.Players.LocalPlayer.Character
-    if character then
-        canUseTool = true -- Disable tool usage
-
-        local humanoid = character:WaitForChild("Humanoid")
-        local rootPart = character:WaitForChild("HumanoidRootPart")
-
-        rootPart.Anchored = false -- Change to false if you do not want it to anchor
-
-        -- Optional delay before starting the animation
-        wait(0)
-
-        local animation = Instance.new("Animation")
-        animation.AnimationId = animationId
-        local animationTrack = humanoid:LoadAnimation(animation)
-        animationTrack:Play() -- Play the animation
-
-        sound:Play() -- Play the sound
-
-local wow1 = game.ReplicatedStorage.Resources.Dragon["Complete"].Part.Debri:Clone()
-wow1.Parent = game.Players.LocalPlayer.Character["Torso"]
-    for _, child in ipairs(wow1:GetChildren()) do
-        if child:IsA("ParticleEmitter") then -- Check if the child is a ParticleEmitter
-            child:Emit(20) -- Emit 20 particles
+                game:GetService("RunService").Heartbeat:Connect(updateEffectPosition)
+            end
         end
-    end
 
-        -- Wait for the cooldown period before enabling the tool again
-        wait(cooldownTime)
-        canUseTool = true -- Re-enable tool usage
-    end
-end
+        -- Spawn effect on both legs
+        spawnEffect(leftLeg)
+        spawnEffect(rightLeg)
+  end
 
 tool.Equipped:Connect(onEquipped)
 tool.Parent = game.Players.LocalPlayer.Backpack
