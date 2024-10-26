@@ -161,42 +161,22 @@ delay(1.8, function()
 
 end)
 
-local assetId = 14675208667
-local effect = game:GetObjects("rbxassetid://" .. assetId)[1]
-
-if effect then
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local rightLeg = character:FindFirstChild("RightFoot") or character:FindFirstChild("Right Leg")
-    local leftLeg = character:FindFirstChild("LeftFoot") or character:FindFirstChild("Left Leg")
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-
-    effect.PrimaryPart = effect:FindFirstChildWhichIsA("BasePart")
-
-    local function spawnEffect(leg)
-        if leg then
-            local legEffect = effect:Clone()
-            legEffect.Parent = leg
-            legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
-            for _, part in pairs(legEffect:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = false
-                end
-            end
-
-            local function updateEffectPosition()
-                legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
-            end
-
-            game:GetService("RunService").Heartbeat:Connect(updateEffectPosition)
+local final1 = game.ReplicatedStorage.Resources.KJEffects["KJWallCombo"].FinalImpact.Attachment:Clone()
+final1.Parent = game.Players.LocalPlayer.Character["Head"]
+for _, child in ipairs(final1:GetChildren()) do
+    if child:IsA("ParticleEmitter") then -- Check if the child is a ParticleEmitter
+        child:Emit(50) -- Emit 20 particles
+    end
+end
+local final4 = game.ReplicatedStorage.Resources.KJEffects["KJWallCombo"].FinalImpact.Attachment:Clone()
+final4.Parent = game.Players.LocalPlayer.Character["Torso"]
+    for _, child in ipairs(final4:GetChildren()) do
+        if child:IsA("ParticleEmitter") then -- Check if the child is a ParticleEmitter
+            child:Emit(3) -- Emit 20 particles
         end
     end
 
-    -- Directly call spawnEffect for both legs
-    spawnEffect(rightLeg)
-    spawnEffect(leftLeg)
-end
-    end
+  end
 
 end
 
@@ -874,45 +854,58 @@ player.CharacterAdded:Connect(function(newCharacter)
 
 end) 
 
---[[Adding Quote or Message when Executed]]
+    -- Create a new tool
+    local tool = Instance.new("Tool")
+    tool.Name = "Power up"
+    tool.RequiresHandle = false
 
-local player = game.Players.LocalPlayer
-repeat wait() until player.Character
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    -- Tool functionality
+    local function onActivated()
+        local assetId = 14675208667
+        local effect = game:GetObjects("rbxassetid://" .. assetId)[1]
 
--- Messages to send
-local messages = {null}
+        if effect then
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local rightLeg = character:FindFirstChild("RightFoot") or character:FindFirstChild("Right Leg")
+            local leftLeg = character:FindFirstChild("LeftFoot") or character:FindFirstChild("Left Leg")
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
 
-local function sendMessage(text)
-    ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(text, "null")
-end
+            effect.PrimaryPart = effect:FindFirstChildWhichIsA("BasePart")
 
-for _, message in ipairs(messages) do
-    sendMessage(message)
-    wait(1.7) -- Wait time for each message
-end
+            -- Make effects purple
+            for _, part in pairs(effect:GetDescendants()) do
+                if part:IsA("BasePart") or part:IsA("ParticleEmitter") then
+                    part.Color = Color3.fromRGB(170, 0, 255)
+                end
+            end
 
---[[END OF QUOTES]]
+            local function spawnEffect(leg)
+                if leg then
+                    local legEffect = effect:Clone()
+                    legEffect.Parent = leg
+                    legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
+                    for _, part in pairs(legEffect:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = false
+                        end
+                    end
 
---[[Execute Anims (Animations when you execute script]]
+                    local function updateEffectPosition()
+                        legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
+                    end
 
-local p = game.Players.LocalPlayer
-local Humanoid = p.Character:WaitForChild("Humanoid")
+                    game:GetService("RunService").Heartbeat:Connect(updateEffectPosition)
+                end
+            end
 
-for _, animTrack in pairs(Humanoid:GetPlayingAnimationTracks()) do
-    animTrack:Stop()
-end
+            -- Directly call spawnEffect for both legs
+            spawnEffect(rightLeg)
+            spawnEffect(leftLeg)
+        end
+    end
 
-local Anim = Humanoid:LoadAnimation(AnimAnim)
+    tool.Activated:Connect(onActivated)
 
-local startTime = 0.05
-
-Anim:Play()
-Anim:AdjustSpeed(0)
-Anim.TimePosition = startTime
-Anim:AdjustSpeed(1)
-
---[[END OF EXECUTE ANIMS]]
-
+    -- Give the tool to the player's backpack
+    tool.Parent = player.Backpack
