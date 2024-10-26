@@ -866,7 +866,9 @@ handle.CanCollide = false
 handle.Parent = tool
   
 local assetId = 14675208667
-  local effect = game:GetObjects("rbxassetid://" .. assetId)[1]
+
+local function onActivated()
+    local effect = game:GetObjects("rbxassetid://" .. assetId)[1]
     if effect then
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
@@ -902,7 +904,8 @@ local assetId = 14675208667
         -- Spawn effect on both legs
         spawnEffect(leftLeg)
         spawnEffect(rightLeg)
-  end
+    end
+end
 
-tool.Equipped:Connect(onEquipped)
+tool.Activated:Connect(onActivated)
 tool.Parent = game.Players.LocalPlayer.Backpack
