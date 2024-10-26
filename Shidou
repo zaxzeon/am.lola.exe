@@ -203,7 +203,7 @@ end
 
 local AnimAnim = Instance.new("Animation")
 
-AnimAnim.AnimationId = "rbxassetid://18716581594"
+AnimAnim.AnimationId = "rbxassetid://12460977270"
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
@@ -268,7 +268,7 @@ end
 
 local AnimAnim = Instance.new("Animation")
 
-AnimAnim.AnimationId = "rbxassetid://18715691149"
+AnimAnim.AnimationId = "rbxassetid://17464644182"
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
@@ -849,7 +849,7 @@ local humanoid = character:WaitForChild("Humanoid")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- Messages to send
-local messages = {"I am a striker...", "I Just dont Kick Soccer balls... I can Also Kick you...", "I am Shidou..", "You will Fear me...."}
+local messages = {"l am a str1ker...", "l Just d0nt K1ck S0ccer ba11s... l can Als0 K1ck y0u...", "l am Sh1d0u..", "Y0u w1ll F3ar me...."}
 
 local function sendMessage(text)
     ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(text, "All")
