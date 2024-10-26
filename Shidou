@@ -332,7 +332,7 @@ end
 
 local AnimAnim = Instance.new("Animation")
 
-AnimAnim.AnimationId = "rbxassetid://18896127525"
+AnimAnim.AnimationId = "rbxassetid://18179181663"
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
@@ -450,7 +450,7 @@ end
 
 local AnimAnim = Instance.new("Animation")
 
-AnimAnim.AnimationId = "rbxassetid://17106858586 "
+AnimAnim.AnimationId = "rbxassetid://4837749916 "
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
@@ -849,7 +849,7 @@ local humanoid = character:WaitForChild("Humanoid")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- Messages to send
-local messages = {"MESSAGE x1", "MESSAGE x2", "MESSAGE x3", "MESSAGE x4"}
+local messages = {"I am a striker...", "I Just dont Kick Soccer balls... I can Also Kick you...", "I am Shidou..", "You will Fear me...."}
 
 local function sendMessage(text)
     ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(text, "All")
@@ -870,9 +870,6 @@ local Humanoid = p.Character:WaitForChild("Humanoid")
 for _, animTrack in pairs(Humanoid:GetPlayingAnimationTracks()) do
     animTrack:Stop()
 end
-
-local AnimAnim = Instance.new("Animation")
-AnimAnim.AnimationId = "rbxassetid://14611879113" -- Replace with your animation ID
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
