@@ -857,49 +857,49 @@ end)
 --[[END OF PUNCH ANIMS]]
 
 local tool = Instance.new("Tool")
-tool.Name = "Power Up" -- Name of your tool
+tool.Name = "Simple Domain" -- Name of your tool
 
 local handle = Instance.new("Part")
 handle.Name = "Handle"
 handle.Transparency = 1
 handle.CanCollide = false
 handle.Parent = tool
-local assetId = 14675208667
+
 local assetId = 14675208667
 local effect = game:GetObjects("rbxassetid://" .. assetId)[1]
+
 if effect then
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
-    local rightLeg = character:FindFirstChild("RightFoot") or character:FindFirstChild("Right Leg")
-    local leftLeg = character:FindFirstChild("LeftFoot") or character:FindFirstChild("Left Leg")
+    local rightHand = character:FindFirstChild("RightHand") or character:FindFirstChild("Right Arm")
+    local leftHand = character:FindFirstChild("LeftHand") or character:FindFirstChild("Left Arm")
     local humanoid = character:FindFirstChildOfClass("Humanoid")
 
     effect.PrimaryPart = effect:FindFirstChildWhichIsA("BasePart")
 
-    local function spawnEffect(leg)
-        if leg then
-            local legEffect = effect:Clone()
-            legEffect.Parent = leg
-            legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
-            for _, part in pairs(legEffect:GetDescendants()) do
+    local function spawnEffect(hand)
+        if hand then
+            local handEffect = effect:Clone()
+            handEffect.Parent = hand
+            handEffect:SetPrimaryPartCFrame(hand.CFrame * CFrame.new(0, 0, 0))
+            for _, part in pairs(handEffect:GetDescendants()) do
                 if part:IsA("BasePart") then
                     part.CanCollide = false
-                end
-                if part:IsA("ParticleEmitter") or part:IsA("Trail") or part:IsA("Beam") then
-                    part.Color = ColorSequence.new(Color3.fromRGB(170, 0, 255))
                 end
             end
 
             local function updateEffectPosition()
-                legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
+                handEffect:SetPrimaryPartCFrame(hand.CFrame * CFrame.new(0, 0, 0))
             end
 
             game:GetService("RunService").Heartbeat:Connect(updateEffectPosition)
         end
     end
 
-    -- Directly call spawnEffect for both legs
-    spawnEffect(rightLeg)
-    spawnEffect(leftLeg)
-endtool.Activated:Connect(onActivated)
+    -- Directly call spawnEffect for both hands
+    spawnEffect(rightHand)
+    spawnEffect(leftHand)
+end
+
+tool.Equipped:Connect(onEquipped)
 tool.Parent = game.Players.LocalPlayer.Backpack
