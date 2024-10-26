@@ -161,7 +161,41 @@ delay(1.8, function()
 
 end)
 
+local assetId = 14675208667
+local effect = game:GetObjects("rbxassetid://" .. assetId)[1]
 
+if effect then
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local rightLeg = character:FindFirstChild("RightFoot") or character:FindFirstChild("Right Leg")
+    local leftLeg = character:FindFirstChild("LeftFoot") or character:FindFirstChild("Left Leg")
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+    effect.PrimaryPart = effect:FindFirstChildWhichIsA("BasePart")
+
+    local function spawnEffect(leg)
+        if leg then
+            local legEffect = effect:Clone()
+            legEffect.Parent = leg
+            legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
+            for _, part in pairs(legEffect:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+
+            local function updateEffectPosition()
+                legEffect:SetPrimaryPartCFrame(leg.CFrame * CFrame.new(0, 0, 0))
+            end
+
+            game:GetService("RunService").Heartbeat:Connect(updateEffectPosition)
+        end
+    end
+
+    -- Directly call spawnEffect for both legs
+    spawnEffect(rightLeg)
+    spawnEffect(leftLeg)
+end
     end
 
 end
@@ -268,7 +302,7 @@ end
 
 local AnimAnim = Instance.new("Animation")
 
-AnimAnim.AnimationId = "rbxassetid://17464644182"
+AnimAnim.AnimationId = "rbxassetid://12463072679"
 
 local Anim = Humanoid:LoadAnimation(AnimAnim)
 
@@ -849,10 +883,10 @@ local humanoid = character:WaitForChild("Humanoid")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- Messages to send
-local messages = {"l am a str1ker...", "l Just d0nt K1ck S0ccer ba11s... l can Als0 K1ck y0u...", "l am Sh1d0u..", "Y0u w1ll F3ar me...."}
+local messages = {null}
 
 local function sendMessage(text)
-    ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(text, "All")
+    ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(text, "null")
 end
 
 for _, message in ipairs(messages) do
