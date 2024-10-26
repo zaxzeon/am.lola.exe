@@ -857,7 +857,7 @@ end)
 --[[END OF PUNCH ANIMS]]
 
 local tool = Instance.new("Tool")
-tool.Name = "Simple Domain" -- Name of your tool
+tool.Name = "Power Up" -- Name of your tool
 
 local handle = Instance.new("Part")
 handle.Name = "Handle"
