@@ -37,6 +37,7 @@ local Window = Rayfield:CreateWindow({
        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
     end,
  })
+ 
  local Toggle = Tab:CreateToggle({
     Name = "WalkSpeed Toggle",
     CurrentValue = false,
