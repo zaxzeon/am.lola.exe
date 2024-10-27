@@ -12,3 +12,54 @@ local Window = Rayfield:CreateWindow({
 })
 
 local Tab = Window:CreateTab("Main", 11446825283) -- Second argument is the image ID
+local Section = Tab:CreateSection("Main")
+local Toggle = Tab:CreateToggle({
+  Name = "AutoFarm",
+  CurrentValue = false,
+  Flag = "AutoFarmToggle",
+  Callback = function(Value)
+     getgenv().AutoFarm = Value
+     while getgenv().AutoFarm do
+        local plr = game.Players.LocalPlayer
+        local char = plr.Character
+        if char and char:FindFirstChild("HumanoidRootPart") then
+           local level = plr.Data.Level.Value
+           if level == 1 then
+               -- Farm Bandits
+               for _, v in pairs(workspace.Enemies:GetChildren()) do
+                   if v.Name == "Bandit" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       repeat
+                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           wait()
+                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+                   end
+               end
+           elseif level >= 2 and level < 10 then
+               -- Farm Jungle Pirates
+               for _, v in pairs(workspace.Enemies:GetChildren()) do
+                   if v.Name == "Jungle Pirate" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       repeat
+                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           wait()
+                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+                   end
+               end
+           elseif level >= 10 and level < 15 then
+               -- Farm Gorilla
+               for _, v in pairs(workspace.Enemies:GetChildren()) do
+                   if v.Name == "Gorilla" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       repeat
+                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           wait()
+                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+                   end
+               end
+           end
+        end
+        wait()
+     end
+  end,
+})
