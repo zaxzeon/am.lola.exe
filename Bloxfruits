@@ -1,0 +1,14 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "kyoshi Blox Fruits Version",
+   LoadingTitle = "kyoshi Blox Fruits",
+   LoadingSubtitle = "by kyoshi",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "kyoshiConfig",
+      FileName = "BloxFruits"
+   }
+})
+
+local Tab = Window:CreateTab("Main", 11446825283) -- Second argument is the image ID
