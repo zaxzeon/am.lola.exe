@@ -38,8 +38,8 @@ local Window = Rayfield:CreateWindow({
     end,
  })
 
-local OtherTab = Window:CreateTab("Other", 4483362458)
-local OtherSection = OtherTab:CreateSection("Other")
+local Tab = Window:CreateTab("Other", 4483362458)
+local OtherSection = Tab:CreateSection("Other")
 
  local Toggle = Tab:CreateToggle({
     Name = "WalkSpeed Toggle",
