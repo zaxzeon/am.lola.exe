@@ -25,6 +25,10 @@ local Toggle = Tab:CreateToggle({
         local char = plr.Character
         if char and char:FindFirstChild("HumanoidRootPart") then
            local level = plr.Data.Level.Value
+           
+           -- Equip melee weapon
+           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("EquipWeapon", "Combat")
+           
            if level == 1 then
                -- Farm Bandits
                for _, v in pairs(workspace.Enemies:GetChildren()) do
@@ -32,6 +36,8 @@ local Toggle = Tab:CreateToggle({
                        repeat
                            char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           game:GetService("VirtualUser"):CaptureController()
+                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
                            wait()
                        until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
                    end
@@ -43,6 +49,8 @@ local Toggle = Tab:CreateToggle({
                        repeat
                            char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           game:GetService("VirtualUser"):CaptureController()
+                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
                            wait()
                        until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
                    end
@@ -54,6 +62,47 @@ local Toggle = Tab:CreateToggle({
                        repeat
                            char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           game:GetService("VirtualUser"):CaptureController()
+                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+                           wait()
+                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+                   end
+               end
+           elseif level >= 15 and level < 30 then
+               -- Farm Gorilla King
+               for _, v in pairs(workspace.Enemies:GetChildren()) do
+                   if v.Name == "Gorilla King" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       repeat
+                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           game:GetService("VirtualUser"):CaptureController()
+                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+                           wait()
+                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+                   end
+               end
+           elseif level >= 30 and level < 40 then
+               -- Farm Pirate
+               for _, v in pairs(workspace.Enemies:GetChildren()) do
+                   if v.Name == "Pirate" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       repeat
+                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           game:GetService("VirtualUser"):CaptureController()
+                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+                           wait()
+                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+                   end
+               end
+           elseif level >= 40 then
+               -- Farm Brute
+               for _, v in pairs(workspace.Enemies:GetChildren()) do
+                   if v.Name == "Brute" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       repeat
+                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           game:GetService("VirtualUser"):CaptureController()
+                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
                            wait()
                        until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
                    end
@@ -62,5 +111,30 @@ local Toggle = Tab:CreateToggle({
         end
         wait()
      end
-  end,
+  end
+})
+
+Tab:CreateButton({
+   Name = "Get Level",
+   Callback = function()
+      local level = game.Players.LocalPlayer.Data.Level.Value
+      local island = ""
+      
+      if level < 15 then
+          island = "Starter Island"
+      elseif level >= 15 and level < 30 then
+          island = "Jungle Island"
+      elseif level >= 30 and level < 40 then
+          island = "Pirate Village"
+      elseif level >= 40 then
+          island = "Brute Island"
+      end
+      
+      Rayfield:Notify({
+         Title = "Level Information",
+         Content = "Your Level is " .. level .. " and you should be at " .. island,
+         Duration = 1.5,
+         Image = 4483362458,
+      })
+   end,
 })
