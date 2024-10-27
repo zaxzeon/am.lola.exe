@@ -106,6 +106,7 @@ local Window = Rayfield:CreateWindow({
        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
     end,
  })
+ 
  local Toggle = Tab:CreateToggle({
      Name = "Fly",
      CurrentValue = false,
