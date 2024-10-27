@@ -106,7 +106,7 @@ local Window = Rayfield:CreateWindow({
        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
     end,
  })
- 
+
  local Toggle = Tab:CreateToggle({
      Name = "Fly",
      CurrentValue = false,
@@ -123,14 +123,16 @@ local Window = Rayfield:CreateWindow({
              
              humanoid:ChangeState(Enum.HumanoidStateType.Physics)
              
-             game:GetService("UserInputService").InputBegan:Connect(function(input)
-                 if input.KeyCode == Enum.KeyCode.Space then
-                     bodyVelocity.Velocity = Vector3.new(0, 50, 0)
+             game:GetService("UserInputService").InputChanged:Connect(function(input)
+                 if input.UserInputType == Enum.UserInputType.Touch then
+                     local delta = input.Position - input.Delta
+                     local moveDirection = root.CFrame:VectorToWorldSpace(Vector3.new(delta.X, 0, delta.Y))
+                     bodyVelocity.Velocity = moveDirection.Unit * 50
                  end
              end)
              
-             game:GetService("UserInputService").InputEnded:Connect(function(input)
-                 if input.KeyCode == Enum.KeyCode.Space then
+             game:GetService("RunService").RenderStepped:Connect(function()
+                 if not game:GetService("UserInputService"):IsMouseButtonPressed(Enum.UserInputType.Touch) then
                      bodyVelocity.Velocity = Vector3.new(0, 0, 0)
                  end
              end)
@@ -142,4 +144,3 @@ local Window = Rayfield:CreateWindow({
          end
      end,
  })
- 
