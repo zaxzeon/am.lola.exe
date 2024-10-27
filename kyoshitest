@@ -106,41 +106,116 @@ local Window = Rayfield:CreateWindow({
        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
     end,
  })
+ 
+local Toggle = Tab:CreateToggle({
+    Name = "Fly",
+    CurrentValue = false,
+    Flag = "FlyToggle",
+    Callback = function(Value)
+        local plr = game.Players.LocalPlayer
+        local flying = false
+        local ctrl = {f = 0, b = 0, l = 0, r = 0}
+        local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+        local maxspeed = 50
+        local speed = 0
 
- local Toggle = Tab:CreateToggle({
-     Name = "Fly",
-     CurrentValue = false,
-     Flag = "FlyToggle",
-     Callback = function(Value)
-         local humanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
-         local root = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-         if Value then
-             local bodyVelocity = Instance.new("BodyVelocity")
-             bodyVelocity.Name = "FlyVelocity"
-             bodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-             bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-             bodyVelocity.Parent = root
-             
-             humanoid:ChangeState(Enum.HumanoidStateType.Physics)
-             
-             game:GetService("UserInputService").InputChanged:Connect(function(input)
-                 if input.UserInputType == Enum.UserInputType.Touch then
-                     local delta = input.Position - input.Delta
-                     local moveDirection = root.CFrame:VectorToWorldSpace(Vector3.new(delta.X, 0, delta.Y))
-                     bodyVelocity.Velocity = moveDirection.Unit * 50
-                 end
-             end)
-             
-             game:GetService("RunService").RenderStepped:Connect(function()
-                 if not game:GetService("UserInputService"):IsMouseButtonPressed(Enum.UserInputType.Touch) then
-                     bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-                 end
-             end)
-         else
-             if root:FindFirstChild("FlyVelocity") then
-                 root.FlyVelocity:Destroy()
-             end
-             humanoid:ChangeState(Enum.HumanoidStateType.Running)
-         end
-     end,
- })
+        if Value then
+            local bg = Instance.new("BodyGyro", game.Players.LocalPlayer.Character.HumanoidRootPart)
+            bg.P = 9e4
+            bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+            bg.cframe = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            local bv = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
+            bv.velocity = Vector3.new(0,0.1,0)
+            bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+            flying = true
+
+            local flyPad = Instance.new("ScreenGui")
+            local upButton = Instance.new("TextButton")
+            local downButton = Instance.new("TextButton")
+            local leftButton = Instance.new("TextButton")
+            local rightButton = Instance.new("TextButton")
+            local forwardButton = Instance.new("TextButton")
+            local backButton = Instance.new("TextButton")
+
+            flyPad.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+            flyPad.Name = "FlyPad"
+
+            local function createButton(name, pos)
+                local button = Instance.new("TextButton")
+                button.Size = UDim2.new(0, 50, 0, 50)
+                button.Position = pos
+                button.Text = name
+                button.BackgroundTransparency = 0.5
+                button.BackgroundColor3 = Color3.new(0, 0, 0)
+                button.TextColor3 = Color3.new(1, 1, 1)
+                button.Parent = flyPad
+                return button
+            end
+
+            upButton = createButton("↑", UDim2.new(0.9, 0, 0.7, 0))
+            downButton = createButton("↓", UDim2.new(0.9, 0, 0.8, 0))
+            leftButton = createButton("←", UDim2.new(0.1, 0, 0.75, 0))
+            rightButton = createButton("→", UDim2.new(0.2, 0, 0.75, 0))
+            forwardButton = createButton("F", UDim2.new(0.15, 0, 0.65, 0))
+            backButton = createButton("B", UDim2.new(0.15, 0, 0.85, 0))
+
+            game:GetService("RunService").Heartbeat:Connect(function()
+                if flying then
+                    if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+                        speed = speed+.5+(speed/maxspeed)
+                        if speed > maxspeed then
+                            speed = maxspeed
+                        end
+                    elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+                        speed = speed-1
+                        if speed < 0 then
+                            speed = 0
+                        end
+                    end
+                    if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+                        bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+                        lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+                    elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+                        bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+                    else
+                        bv.velocity = Vector3.new(0,0.1,0)
+                    end
+                    bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+                end
+            end)
+
+            local function buttonPressed(button, ctrlValue, ctrlKey)
+                local pressing = false
+                button.MouseButton1Down:Connect(function()
+                    pressing = true
+                    ctrl[ctrlKey] = ctrlValue
+                end)
+                button.MouseButton1Up:Connect(function()
+                    pressing = false
+                    ctrl[ctrlKey] = 0
+                end)
+            end
+
+            buttonPressed(forwardButton, 1, "f")
+            buttonPressed(backButton, -1, "b")
+            buttonPressed(leftButton, -1, "l")
+            buttonPressed(rightButton, 1, "r")
+            buttonPressed(upButton, 1, "f")
+            buttonPressed(downButton, -1, "b")
+
+        else
+            if game.Players.LocalPlayer.PlayerGui:FindFirstChild("FlyPad") then
+                game.Players.LocalPlayer.PlayerGui.FlyPad:Destroy()
+            end
+            for _, v in pairs(game.Players.LocalPlayer.Character.HumanoidRootPart:GetChildren()) do
+                if v:IsA("BodyGyro") or v:IsA("BodyVelocity") then
+                    v:Destroy()
+                end
+            end
+            flying = false
+            ctrl = {f = 0, b = 0, l = 0, r = 0}
+            lastctrl = {f = 0, b = 0, l = 0, r = 0}
+            speed = 0
+        end
+    end,
+})
