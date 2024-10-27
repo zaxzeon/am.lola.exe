@@ -19,6 +19,7 @@ local Toggle = Tab:CreateToggle({
   Flag = "AutoFarmToggle",
   Callback = function(Value)
      getgenv().AutoFarm = Value
+     if not Value then return end
      while getgenv().AutoFarm do
         local plr = game.Players.LocalPlayer
         local char = plr.Character
