@@ -1,5 +1,8 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-local Window = Rayfield:CreateWindow({
+if game.PlaceId == 10449761463 then
+    local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+else
+    game.Players.LocalPlayer:Kick("Wrong Game")
+endlocal Window = Rayfield:CreateWindow({
     Name = "BLAHLAH",
     LoadingTitle = "TUtorial",
     LoadingSubtitle = "by Sirius",
@@ -31,81 +34,5 @@ local Window = Rayfield:CreateWindow({
 
  local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
  local Section = Tab:CreateSection("Main")
- local Button = Tab:CreateButton({
-    Name = "Inf Yield",
-    Callback = function()
-       loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-    end,
- })
+ 
 
-local Tab = Window:CreateTab("Other", 4483362458)
-local OtherSection = Tab:CreateSection("Other")
-
- local Toggle = Tab:CreateToggle({
-    Name = "WalkSpeed Toggle",
-    CurrentValue = false,
-    Flag = "WalkSpeedToggle",
-    Callback = function(Value)
-       if Value then
-          game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 100
-       else
-          game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-       end
-    end,
- })
- 
- local Toggle = Tab:CreateToggle({
-    Name = "Jump Power Toggle",
-    CurrentValue = false,
-    Flag = "JumpPowerToggle", 
-    Callback = function(Value)
-       if Value then
-          game.Players.LocalPlayer.Character.Humanoid.JumpPower = 100
-       else
-          game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
-       end
-    end,
- })
- 
- local Button = Tab:CreateButton({
-    Name = "Reset Character",
-    Callback = function()
-       game.Players.LocalPlayer.Character:BreakJoints()
-    end,
- })
- 
- local Button = Tab:CreateButton({
-    Name = "Anti AFK",
-    Callback = function()
-       local vu = game:GetService("VirtualUser")
-       game:GetService("Players").LocalPlayer.Idled:connect(function()
-          vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-          wait(1)
-          vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-       end)
-    end,
- })
- 
- local Slider = Tab:CreateSlider({
-    Name = "WalkSpeed Slider",
-    Range = {16, 500},
-    Increment = 1,
-    Suffix = "Speed",
-    CurrentValue = 16,
-    Flag = "WalkSpeedSlider",
-    Callback = function(Value)
-       game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-    end,
- })
- 
- local Slider = Tab:CreateSlider({
-    Name = "Jump Power Slider",
-    Range = {50, 500},
-    Increment = 1,
-    Suffix = "Power",
-    CurrentValue = 50,
-    Flag = "JumpPowerSlider",
-    Callback = function(Value)
-       game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
-    end,
- })
