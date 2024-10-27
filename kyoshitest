@@ -37,7 +37,7 @@ local Window = Rayfield:CreateWindow({
        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
     end,
  })
- 
+
  local Toggle = Tab:CreateToggle({
     Name = "WalkSpeed Toggle",
     CurrentValue = false,
@@ -105,5 +105,40 @@ local Window = Rayfield:CreateWindow({
     Callback = function(Value)
        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
     end,
+ })
+ local Toggle = Tab:CreateToggle({
+     Name = "Fly",
+     CurrentValue = false,
+     Flag = "FlyToggle",
+     Callback = function(Value)
+         local humanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+         local root = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+         if Value then
+             local bodyVelocity = Instance.new("BodyVelocity")
+             bodyVelocity.Name = "FlyVelocity"
+             bodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+             bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+             bodyVelocity.Parent = root
+             
+             humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+             
+             game:GetService("UserInputService").InputBegan:Connect(function(input)
+                 if input.KeyCode == Enum.KeyCode.Space then
+                     bodyVelocity.Velocity = Vector3.new(0, 50, 0)
+                 end
+             end)
+             
+             game:GetService("UserInputService").InputEnded:Connect(function(input)
+                 if input.KeyCode == Enum.KeyCode.Space then
+                     bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+                 end
+             end)
+         else
+             if root:FindFirstChild("FlyVelocity") then
+                 root.FlyVelocity:Destroy()
+             end
+             humanoid:ChangeState(Enum.HumanoidStateType.Running)
+         end
+     end,
  })
  
