@@ -30,56 +30,11 @@ local Window = Rayfield:CreateWindow({
  })
 
  local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
-local Section = MainTab:CreateSection("Main")
-
-local Button = Tab:CreateButton({
-   Name = "Blah",
-   Callback = function()
-      print("KEWL")
-   end,
-})
-
-local OtherTab = Window:CreateTab("Other", 4483362458) -- Title, Image
-local Section = Tab:CreateSection("Other")
-
-local Toggle = Tab:CreateToggle({
-   Name = "Example Toggle",
-   CurrentValue = false,
-   Flag = "Toggle1",
-   Callback = function(Value)
-      local player = game.Players.LocalPlayer
-      local character = player.Character or player.CharacterAdded:Wait()
-      local humanoid = character:WaitForChild("Humanoid")
-      local rootPart = character:WaitForChild("HumanoidRootPart")
-      
-      if Value then
-         local bodyVelocity = Instance.new("BodyVelocity")
-         bodyVelocity.Name = "FlyVelocity"
-         bodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-         bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-         bodyVelocity.Parent = rootPart
-         
-         game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
-            if not gameProcessed then
-               if input.KeyCode == Enum.KeyCode.Space then
-                  bodyVelocity.Velocity = Vector3.new(0, 50, 0)
-               elseif input.KeyCode == Enum.KeyCode.LeftControl then
-                  bodyVelocity.Velocity = Vector3.new(0, -50, 0)
-               end
-            end
-         end)
-         
-         game:GetService("UserInputService").InputEnded:Connect(function(input, gameProcessed)
-            if not gameProcessed then
-               if input.KeyCode == Enum.KeyCode.Space or input.KeyCode == Enum.KeyCode.LeftControl then
-                  bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-               end
-            end
-         end)
-      else
-         if rootPart:FindFirstChild("FlyVelocity") then
-            rootPart.FlyVelocity:Destroy()
-         end
-      end
-   end,
-})
+ local Section = Tab:CreateSection("Main")
+ local Button = Tab:CreateButton({
+    Name = "Inf Yield",
+    Callback = function()
+       loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+    end,
+ })
+ 
