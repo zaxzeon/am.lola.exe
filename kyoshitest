@@ -1,6 +1,5 @@
-if game.PlaceId == 10449761463 then
-    local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-    local Window = Rayfield:CreateWindow({
+  local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+  local Window = Rayfield:CreateWindow({
         Name = "BLAHLAH",
         LoadingTitle = "TUtorial",
         LoadingSubtitle = "by Sirius",
@@ -32,9 +31,3 @@ if game.PlaceId == 10449761463 then
     
      local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
      local Section = Tab:CreateSection("Main")
-else
-    game.Players.LocalPlayer:Kick("Wrong Game")
-end
-
- 
-
