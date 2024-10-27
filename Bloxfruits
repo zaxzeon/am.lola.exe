@@ -8,6 +8,21 @@ local Window = Rayfield:CreateWindow({
       Enabled = true,
       FolderName = "kyoshiConfig",
       FileName = "BloxFruits"
+   },
+   KeySystem = true,
+   KeySettings = {
+      Title = "kyoshi Blox Fruits Key",
+      Subtitle = "Enter Key",
+      Note = "Get key from the button below",
+      Key = "hi",
+      Actions = {
+         [1] = {
+            Text = "Get Key",
+            Callback = function()
+               setclipboard("hi")
+            end,
+         }
+      }
    }
 })
 
@@ -94,10 +109,49 @@ local Toggle = Tab:CreateToggle({
                        until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
                    end
                end
-           elseif level >= 40 then
+           elseif level >= 40 and level < 60 then
                -- Farm Brute
                for _, v in pairs(workspace.Enemies:GetChildren()) do
                    if v.Name == "Brute" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       repeat
+                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           game:GetService("VirtualUser"):CaptureController()
+                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+                           wait()
+                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+                   end
+               end
+           elseif level >= 60 and level < 75 then
+               -- Farm Desert Bandit
+               for _, v in pairs(workspace.Enemies:GetChildren()) do
+                   if v.Name == "Desert Bandit" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       repeat
+                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           game:GetService("VirtualUser"):CaptureController()
+                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+                           wait()
+                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+                   end
+               end
+           elseif level >= 75 and level < 90 then
+               -- Farm Desert Officer
+               for _, v in pairs(workspace.Enemies:GetChildren()) do
+                   if v.Name == "Desert Officer" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       repeat
+                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                           game:GetService("VirtualUser"):CaptureController()
+                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+                           wait()
+                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+                   end
+               end
+           elseif level >= 90 and level <= 100 then
+               -- Farm Desert King
+               for _, v in pairs(workspace.Enemies:GetChildren()) do
+                   if v.Name == "Desert King" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
                        repeat
                            char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
@@ -117,24 +171,33 @@ local Toggle = Tab:CreateToggle({
 Tab:CreateButton({
    Name = "Get Level",
    Callback = function()
-      local level = game.Players.LocalPlayer.Data.Level.Value
-      local island = ""
-      
-      if level < 15 then
-          island = "Starter Island"
-      elseif level >= 15 and level < 30 then
-          island = "Jungle Island"
-      elseif level >= 30 and level < 40 then
-          island = "Pirate Village"
-      elseif level >= 40 then
-          island = "Brute Island"
-      end
-      
-      Rayfield:Notify({
-         Title = "Level Information",
-         Content = "Your Level is " .. level .. " and you should be at " .. island,
-         Duration = 1.5,
-         Image = 4483362458,
-      })
-   end,
+       local level = game.Players.LocalPlayer.Data.Level.Value
+       local island = ""
+       
+       if level < 60 then
+           island = "Pirate Village"
+       elseif level >= 60 and level < 75 then
+           island = "Desert Area"
+       elseif level >= 75 and level < 90 then
+           island = "Desert Area (Officer Zone)"
+       elseif level >= 90 and level <= 100 then
+           island = "Desert Area (King's Territory)"
+       end
+       
+       Rayfield:Notify({
+           Title = "Level Information",
+           Content = "You are level " .. level .. " which means you should be at " .. island,
+           Duration = 6.5,
+           Image = 4483362458,
+           Actions = {
+               Ignore = {
+                   Name = "K",
+                   Callback = function()
+                       print("Tell Your Friends To join Tokyo hub v3 for Premium version")
+                   end
+               }
+           }
+       })
+   end
 })
+
