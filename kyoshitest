@@ -1,4 +1,4 @@
-  local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
    Name = "Kyoshi Hub",
    LoadingTitle = "Loading Kyoshi Hub...",
@@ -8,4 +8,76 @@ local Window = Rayfield:CreateWindow({
       FolderName = "KyoshiConfig",
       FileName = "KyoshiHub"
    }
+})
+ local Tab = Window:CreateTab("Main", 4483362458) -- Second argument is the image ID
+ 
+ local Section = Tab:CreateSection("Scripts")
+local Button = Tab:CreateButton({
+   Name = "Script1",
+   Callback = function()
+   -- put your script here (loadstring only)
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Script2",
+   Callback = function()
+   -- put your script here (loadstring only)
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Script3",
+   Callback = function()
+   -- put your script here (loadstring only)
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Script4",
+   Callback = function()
+   -- put your script here (loadstring only)
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Script5",
+   Callback = function()
+   -- put your script here (loadstring only)
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Script6",
+   Callback = function()
+   -- put your script here (loadstring only)
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Script7",
+   Callback = function()
+   -- put your script here (loadstring only)
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Script8",
+   Callback = function()
+   -- put your script here (loadstring only)
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Megumi script Made By Maxisthebedt",
+   Callback = function()
+loadstring(game:HttpGet("https://pastebin.com/raw/MSsTxwfC",true))()
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Script10",
+   Callback = function()
+   -- put your script here (loadstring only)
+   end,
 })
