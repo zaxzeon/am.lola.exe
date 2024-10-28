@@ -172,6 +172,79 @@ Tab:CreateToggle({
    end
 })
 
+Tab:CreateToggle({
+   Name = "Autofarm Bounty",
+   CurrentValue = false,
+   Flag = "AutoFarmBounty",
+   Callback = function(Value)
+       getgenv().AutoFarmBounty = Value
+       
+       -- Show player list notification first
+       local playerList = ""
+       for _, player in pairs(game.Players:GetPlayers()) do
+           if player ~= game.Players.LocalPlayer then
+               playerList = playerList .. player.Name .. " (Level " .. player.Data.Level.Value .. ")\n"
+           end
+       end
+       
+       Rayfield:Notify({
+           Title = "Player List",
+           Content = "Are you sure you want to autofarm the players in this server?\n\nPlayers:\n" .. playerList,
+           Duration = 10,
+           Image = 4483362458,
+           Actions = {
+               Confirm = {
+                   Name = "Yes",
+                   Callback = function()
+                       while getgenv().AutoFarmBounty and task.wait() do
+                           local player = game.Players.LocalPlayer
+                           local char = player.Character
+                           
+                           if char and char:FindFirstChild("HumanoidRootPart") then
+                               for _, target in pairs(game.Players:GetPlayers()) do
+                                   if target ~= player and target.Character and 
+                                   target.Character:FindFirstChild("HumanoidRootPart") and 
+                                   target.Character:FindFirstChild("Humanoid") and 
+                                   target.Character.Humanoid.Health > 0 then
+                                       
+                                       local targetPos = target.Character.HumanoidRootPart.Position
+                                       local tween = game:GetService("TweenService"):Create(
+                                           char.HumanoidRootPart,
+                                           TweenInfo.new((targetPos - char.HumanoidRootPart.Position).Magnitude/300, Enum.EasingStyle.Linear),
+                                           {CFrame = CFrame.new(targetPos) * CFrame.new(0,0,3)}
+                                       )
+                                       tween:Play()
+                                       
+                                       repeat
+                                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", target)
+                                           game:GetService("VirtualUser"):CaptureController()
+                                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+                                           task.wait()
+                                       until not getgenv().AutoFarmBounty or not target.Character or 
+                                       not target.Character:FindFirstChild("Humanoid") or 
+                                       target.Character.Humanoid.Health <= 0
+                                       
+                                       if tween.PlaybackState == Enum.PlaybackState.Playing then
+                                           tween:Cancel()
+                                       end
+                                   end
+                               end
+                           end
+                           task.wait()
+                       end
+                   end
+               },
+               Cancel = {
+                   Name = "No",
+                   Callback = function()
+                       getgenv().AutoFarmBounty = false
+                   end
+               }
+           }
+       })
+   end
+})
+
 local Section = Tab:CreateSection("Get")
 Tab:CreateButton({
    Name = "Get Level",
@@ -316,77 +389,3 @@ Tab:CreateButton({
        })
    end
 })
-  local PlayerDropdown = Tab:CreateDropdown({
-      Name = "Select Player",
-      Options = {},
-      CurrentOption = "",
-      Flag = "PlayerDropdown",
-      Callback = function(Value)
-          for _, player in pairs(game.Players:GetPlayers()) do
-              if player.Name == Value then
-                  selectedPlayer = player
-                  break
-              end
-          end
-      end,
-  })
-
-  -- Update dropdown options when players join/leave
-  local function UpdatePlayerList()
-      local playerNames = {}
-      for _, player in pairs(game.Players:GetPlayers()) do
-          table.insert(playerNames, player.Name)
-      end
-      PlayerDropdown:Refresh(playerNames, true)
-  end
-
-  UpdatePlayerList()
-  game.Players.PlayerAdded:Connect(UpdatePlayerList)
-  game.Players.PlayerRemoving:Connect(UpdatePlayerList)
-
-  Tab:CreateButton({
-      Name = "Get Info",
-      Callback = function()
-          if selectedPlayer then
-              local playerData = {
-                  ["Username"] = selectedPlayer.Name,
-                  ["Display Name"] = selectedPlayer.DisplayName,
-                  ["User ID"] = selectedPlayer.UserId,
-                  ["Account Age"] = selectedPlayer.AccountAge,
-                  ["Team"] = selectedPlayer.Team and selectedPlayer.Team.Name or "None",
-                  ["Level"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats.Level and selectedPlayer.leaderstats.Level.Value or "N/A",
-                  ["Beli"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats.Beli and selectedPlayer.leaderstats.Beli.Value or "N/A",
-                  ["Race"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats.Race and selectedPlayer.leaderstats.Race.Value or "N/A",
-                  ["Devil Fruit"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats["Devil Fruit"] and selectedPlayer.leaderstats["Devil Fruit"].Value or "N/A",
-                  ["Bounty"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats.Bounty and selectedPlayer.leaderstats.Bounty.Value or "N/A",
-                  ["Fighting Style"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats["Fighting Style"] and selectedPlayer.leaderstats["Fighting Style"].Value or "N/A"
-              }
-              
-              local infoText = "Player Information:\n\n"
-              for stat, value in pairs(playerData) do
-                  infoText = infoText .. stat .. ": " .. tostring(value) .. "\n"
-              end
-              
-              Rayfield:Notify({
-                  Title = "Player Stats",
-                  Content = infoText,
-                  Duration = 10,
-                  Image = 4483362458,
-                  Actions = {
-                      Ignore = {
-                          Name = "Close",
-                          Callback = function() end
-                      }
-                  }
-              })
-          else
-              Rayfield:Notify({
-                  Title = "Error",
-                  Content = "Please select a player first!",
-                  Duration = 3,
-                  Image = 4483362458
-              })
-          end
-      end
-  })
-  
