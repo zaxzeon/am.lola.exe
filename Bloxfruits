@@ -44,9 +44,8 @@ local Toggle = Tab:CreateToggle({
            
           -- Fast autotap
           game:GetService("VirtualUser"):CaptureController()
-          game:GetService("VirtualUser"):ClickButton1(Vector2.new(50,50))
-          game:GetService("RunService").RenderStepped:Wait()
-           
+          game:GetService("VirtualUser"):ClickButton1(Vector2.new(0,0))
+          game:GetService("RunService").RenderStepped:Wait()           
           -- Farm based on level
           local level = plr.Data.Level.Value
           local target = ""
@@ -128,6 +127,47 @@ Tab:CreateToggle({
                    end
                end
            end
+       end
+   end
+})
+
+Tab:CreateToggle({
+   Name = "Auto Farm Nearest Enemy",
+   CurrentValue = false,
+   Flag = "AutoFarmNearestEnemy", 
+   Callback = function(Value)
+       getgenv().AutoFarmCody = Value
+       
+       while getgenv().AutoFarmCody and task.wait() do
+           local player = game.Players.LocalPlayer
+           local char = player.Character
+           if char and char:FindFirstChild("HumanoidRootPart") then
+               -- Get nearest enemy
+               local nearestEnemy = nil
+               local shortestDistance = math.huge
+               
+               for _, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                   if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                       local distance = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                       if distance < shortestDistance then
+                           shortestDistance = distance
+                           nearestEnemy = v
+                       end
+                   end
+               end
+               
+               -- Attack nearest enemy
+               if nearestEnemy then
+                   repeat
+                       char.HumanoidRootPart.CFrame = nearestEnemy.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                       game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", nearestEnemy)
+                       game:GetService("VirtualUser"):CaptureController()
+                       game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+                       task.wait()
+                   until not getgenv().AutoFarmCody or not nearestEnemy or not nearestEnemy:FindFirstChild("Humanoid") or nearestEnemy.Humanoid.Health <= 0
+               end
+           end
+           task.wait()
        end
    end
 })
