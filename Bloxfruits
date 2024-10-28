@@ -317,89 +317,59 @@ Tab:CreateButton({
    end
 })
 
-local selectedPlayer = nil
 
-local function updatePlayerList()
-    local players = game:GetService("Players"):GetPlayers()
-    local playerNames = {}
-    for i, player in ipairs(players) do
-        table.insert(playerNames, player.Name)
-    end
-    return playerNames
-end
-
-local PlayerSlider = Tab:CreateDropdown({
+Tab:CreateDropdown({
     Name = "Select Player",
-    Options = updatePlayerList(),
+    Options = {},
     CurrentOption = "",
-    Flag = "PlayerSlider",
+    Flag = "PlayerDropdown",
     Callback = function(Value)
-        selectedPlayer = Value
-    end,
+        _G.SelectedPlayer = Value
+    end    
 })
 
 Tab:CreateButton({
-    Name = "Refresh Players",
+    Name = "Get Player Info",
     Callback = function()
-        PlayerSlider:Refresh(updatePlayerList(), true)
-    end
-})
+        local player = game:GetService("Players"):FindFirstChild(_G.SelectedPlayer)
+        if player then
+            local info = "Player Information:\n\n"
+            info = info .. "Username: " .. player.Name .. "\n"
+            info = info .. "Display Name: " .. player.DisplayName .. "\n"
+            info = info .. "User ID: " .. player.UserId .. "\n"
+            info = info .. "Account Age: " .. player.AccountAge .. " days\n"
+            info = info .. "Team: " .. (player.Team and player.Team.Name or "None") .. "\n"
+            info = info .. "Health: " .. math.floor(player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health or 0) .. "\n"
+            info = info .. "Max Health: " .. math.floor(player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.MaxHealth or 0) .. "\n"
+            info = info .. "Level: " .. (player.leaderstats and player.leaderstats:FindFirstChild("Level") and player.leaderstats.Level.Value or "N/A") .. "\n"
+            info = info .. "Position: " .. tostring(player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character.HumanoidRootPart.Position or Vector3.new(0,0,0))
 
-Tab:CreateButton({
-    Name = "Get Player Fruit and Melee",
-    Callback = function()
-        if selectedPlayer then
-            local player = game:GetService("Players"):FindFirstChild(selectedPlayer)
-            if player then
-                local backpack = player:FindFirstChild("Backpack")
-                local character = player.Character
-                local fruitFound = "No fruit found"
-                local meleeFound = "No melee found"
-                
-                local function searchTools(container)
-                    if container then
-                        for _, tool in ipairs(container:GetChildren()) do
-                            for _, item in ipairs(tool:GetChildren()) do
-                                if item.Name == "FruitEat" then
-                                    fruitFound = tool.Name
-                                end
-                                if item.Name == "Melee" then
-                                    meleeFound = tool.Name
-                                end
-                            end
-                        end
-                    end
-                end
-                
-                if backpack then
-                    searchTools(backpack)
-                end
-                if character then
-                    searchTools(character)
-                end
-                
-                Rayfield:Notify({
-                    Title = selectedPlayer .. "'s Information",
-                    Content = "Fruit: " .. fruitFound .. "\nMelee: " .. meleeFound,
-                    Duration = 6.5,
-                    Image = 4483362458,
-                    Actions = {
-                        Ignore = {
-                            Name = "K",
-                            Callback = function()
-                                print("Tell Your Friends To join Tokyo hub v3 for Premium version")
-                            end
-                        }
-                    }
-                })
-            end
-        else
             Rayfield:Notify({
-                Title = "Error",
-                Content = "Please select a player first",
-                Duration = 3,
-                Image = 4483362458
+                Title = "Player Information",
+                Content = info,
+                Duration = 10,
+                Image = 4483362458,
+                Actions = {
+                    Ignore = {
+                        Name = "Close",
+                        Callback = function()
+                        end
+                    }
+                }
             })
         end
     end
 })
+
+local function UpdatePlayerList()
+    local PlayerList = {}
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        table.insert(PlayerList, player.Name)
+    end
+    Tab:Set("PlayerDropdown", PlayerList)
+end
+
+UpdatePlayerList()
+
+game:GetService("Players").PlayerAdded:Connect(UpdatePlayerList)
+game:GetService("Players").PlayerRemoving:Connect(UpdatePlayerList)
