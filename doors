@@ -1,0 +1,53 @@
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))();
+local Window = Rayfield:CreateWindow({
+   Name = "Doors Script for ChaoticJR",
+   LoadingTitle = "Loading...",
+   LoadingSubtitle = "by PackGodJR",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil,
+      FileName = "PackGodJR"
+   }
+})
+
+local Tab = Window:CreateTab("Main", 110948133796490)
+local Section = Tab:CreateSection("Doors")
+local Toggle = Tab:CreateToggle({
+   Name = "Anti Rush",
+   CurrentValue = false,
+   Flag = "AntiRush",
+   Callback = function(Value)
+      if Value then
+         workspace.ChildAdded:Connect(function(inst)
+            if inst.Name == "RushMoving" or inst.Name == "AmbushMoving" then
+                local character = game.Players.LocalPlayer.Character
+                if character then
+                    character:PivotTo(CFrame.new(character.HumanoidRootPart.Position + Vector3.new(0, 20, 0)))
+                    task.wait(5)
+                    
+                    -- Create image label
+                    local screenGui = Instance.new("ScreenGui")
+                    local imageLabel = Instance.new("ImageLabel")
+                    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+                    imageLabel.Parent = screenGui
+                    imageLabel.BackgroundTransparency = 1
+                    imageLabel.Position = UDim2.new(0.85, 0, 0.85, 0)
+                    imageLabel.Size = UDim2.new(0.1, 0, 0.1, 0)
+                    imageLabel.Image = inst.Name == "RushMoving" and "rbxassetid://110948133796490" or "rbxassetid://110948133796490"
+                    
+                    -- Remove after 3 seconds
+                    task.delay(3, function()
+                        screenGui:Destroy()
+                    end)
+                    
+                    Rayfield:Notify({
+                        Title = inst.Name == "RushMoving" and "Rush Detected" or "Ambush Detected",
+                        Content = "Teleported you to safety!",
+                        Duration = 3,
+                    })
+                end
+            end
+         end)
+      end
+   end,
+})
