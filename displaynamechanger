@@ -71,44 +71,48 @@ Label.Font = Enum.Font.GothamSemibold
 Label.Text = "Display Name Changer"
 Label.TextColor3 = Color3.fromRGB(255, 255, 255)
 Label.TextSize = 16
+    local TextBox = Instance.new("TextBox")
+    TextBox.Name = "NameTextBox"
+    TextBox.Parent = MainFrame
+    TextBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    TextBox.BorderSizePixel = 0
+    TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
+    TextBox.Size = UDim2.new(0.8, 0, 0, 30)
+    TextBox.Font = Enum.Font.GothamSemibold
+    TextBox.PlaceholderText = "Enter new display name..."
+    TextBox.Text = ""
+    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextBox.TextSize = 14
 
-local TextBox = Instance.new("TextBox")
-TextBox.Name = "NameTextBox"
-TextBox.Parent = MainFrame
-TextBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-TextBox.BorderSizePixel = 0
-TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
-TextBox.Size = UDim2.new(0.8, 0, 0, 30)
-TextBox.Font = Enum.Font.GothamSemibold
-TextBox.PlaceholderText = "Enter new display name..."
-TextBox.Text = ""
-TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.TextSize = 14
-local ChangeButton = Instance.new("TextButton")
-ChangeButton.Name = "ChangeButton"
-ChangeButton.Parent = MainFrame
-ChangeButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-ChangeButton.BorderSizePixel = 0
-ChangeButton.Position = UDim2.new(0.1, 0, 0.6, 0)
-ChangeButton.Size = UDim2.new(0.8, 0, 0, 30)
-ChangeButton.Font = Enum.Font.GothamSemibold
-ChangeButton.Text = "Change Display Name"
-ChangeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-ChangeButton.TextSize = 14
+    local ChangeButton = Instance.new("TextButton")
+    ChangeButton.Name = "ChangeButton"
+    ChangeButton.Parent = MainFrame
+    ChangeButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    ChangeButton.BorderSizePixel = 0
+    ChangeButton.Position = UDim2.new(0.1, 0, 0.6, 0)
+    ChangeButton.Size = UDim2.new(0.8, 0, 0, 30)
+    ChangeButton.Font = Enum.Font.GothamSemibold
+    ChangeButton.Text = "Change Display Name"
+    ChangeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ChangeButton.TextSize = 14
 
-ChangeButton.MouseButton1Click:Connect(function()
-    local newName = TextBox.Text
-    if newName ~= "" then
-        local Players = game:GetService("Players")
-        local player = Players.LocalPlayer
+    ChangeButton.MouseButton1Click:Connect(function()
+        local newName = TextBox.Text
+        if newName ~= "" then
+            local Players = game:GetService("Players")
+            local player = Players.LocalPlayer
         
-        -- Use SetAttribute to change the display name
-        player:SetAttribute("DisplayName", newName)
+            -- Use Remote Event to change display name server-side
+            local args = {
+                [1] = "UpdateDisplayName",
+                [2] = newName
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("ChangeDisplayName"):FireServer(unpack(args))
         
-        -- Optional feedback
-        TextBox.Text = ""
-        TextBox.PlaceholderText = "Display name changed!"
-        wait(2)
-        TextBox.PlaceholderText = "Enter new display name..."
-    end
-end)
+            -- Optional feedback
+            TextBox.Text = ""
+            TextBox.PlaceholderText = "Display name changed!"
+            wait(2)
+            TextBox.PlaceholderText = "Enter new display name..."
+        end
+    end)
