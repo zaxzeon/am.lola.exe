@@ -320,8 +320,8 @@ Tab:CreateButton({
 
 Tab:CreateDropdown({
     Name = "Select Player",
-    Options = {},
-    CurrentOption = "",
+    Options = {""},
+    Default = "",
     Flag = "PlayerDropdown",
     Callback = function(Value)
         _G.SelectedPlayer = Value
@@ -366,7 +366,12 @@ local function UpdatePlayerList()
     for _, player in pairs(game:GetService("Players"):GetPlayers()) do
         table.insert(PlayerList, player.Name)
     end
-    Tab:Set("PlayerDropdown", PlayerList)
+    local success, err = pcall(function()
+        Tab:Set({
+            Flag = "PlayerDropdown",
+            Values = PlayerList
+        })
+    end)
 end
 
 UpdatePlayerList()
