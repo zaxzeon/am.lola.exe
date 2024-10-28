@@ -325,34 +325,6 @@ Tab:CreateButton({
           for _, player in pairs(game.Players:GetPlayers()) do
               if player.Name == Value then
                   selectedPlayer = player
-                  local accountAge = player.AccountAge
-                  local userId = player.UserId
-                  local displayName = player.DisplayName
-                  local healthPercent = math.floor((player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health or 0) / (player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.MaxHealth or 100) * 100)
-                
-                  local playerInfo = string.format(
-                      "Account Information:\nDisplay Name: %s\nUsername: %s\nUser ID: %s\nAccount Age: %d days\n\nGame Information:\nHealth: %d%%\nTeam: %s\nLevel: %s",
-                      displayName,
-                      player.Name,
-                      userId,
-                      accountAge,
-                      healthPercent,
-                      player.Team and player.Team.Name or "None",
-                      player.leaderstats and player.leaderstats:FindFirstChild("Level") and player.leaderstats.Level.Value or "N/A"
-                  )
-                
-                  Rayfield:Notify({
-                      Title = "Player Information",
-                      Content = playerInfo,
-                      Duration = 10,
-                      Image = 4483362458,
-                      Actions = {
-                          Ignore = {
-                              Name = "Close",
-                              Callback = function() end
-                          }
-                      }
-                  })
                   break
               end
           end
@@ -371,3 +343,50 @@ Tab:CreateButton({
   UpdatePlayerList()
   game.Players.PlayerAdded:Connect(UpdatePlayerList)
   game.Players.PlayerRemoving:Connect(UpdatePlayerList)
+
+  Tab:CreateButton({
+      Name = "Get Info",
+      Callback = function()
+          if selectedPlayer then
+              local playerData = {
+                  ["Username"] = selectedPlayer.Name,
+                  ["Display Name"] = selectedPlayer.DisplayName,
+                  ["User ID"] = selectedPlayer.UserId,
+                  ["Account Age"] = selectedPlayer.AccountAge,
+                  ["Team"] = selectedPlayer.Team and selectedPlayer.Team.Name or "None",
+                  ["Level"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats.Level and selectedPlayer.leaderstats.Level.Value or "N/A",
+                  ["Beli"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats.Beli and selectedPlayer.leaderstats.Beli.Value or "N/A",
+                  ["Race"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats.Race and selectedPlayer.leaderstats.Race.Value or "N/A",
+                  ["Devil Fruit"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats["Devil Fruit"] and selectedPlayer.leaderstats["Devil Fruit"].Value or "N/A",
+                  ["Bounty"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats.Bounty and selectedPlayer.leaderstats.Bounty.Value or "N/A",
+                  ["Fighting Style"] = selectedPlayer.leaderstats and selectedPlayer.leaderstats["Fighting Style"] and selectedPlayer.leaderstats["Fighting Style"].Value or "N/A"
+              }
+              
+              local infoText = "Player Information:\n\n"
+              for stat, value in pairs(playerData) do
+                  infoText = infoText .. stat .. ": " .. tostring(value) .. "\n"
+              end
+              
+              Rayfield:Notify({
+                  Title = "Player Stats",
+                  Content = infoText,
+                  Duration = 10,
+                  Image = 4483362458,
+                  Actions = {
+                      Ignore = {
+                          Name = "Close",
+                          Callback = function() end
+                      }
+                  }
+              })
+          else
+              Rayfield:Notify({
+                  Title = "Error",
+                  Content = "Please select a player first!",
+                  Duration = 3,
+                  Image = 4483362458
+              })
+          end
+      end
+  })
+  
