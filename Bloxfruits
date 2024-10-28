@@ -96,6 +96,7 @@ local Toggle = Tab:CreateToggle({
   end
 })
 
+local Section = Tab:CreateSection("Get")
 Tab:CreateButton({
    Name = "Get Level",
    Callback = function()
@@ -146,3 +147,29 @@ Tab:CreateButton({
    end
 })
 
+Tab:CreateButton({
+   Name = "Get Store Sale",
+   Callback = function()
+       local store = game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits")
+       local saleText = "Current Store Items:\n"
+       
+       for i,v in pairs(store) do
+           saleText = saleText .. v.Name .. " - " .. v.Price .. " Beli\n"
+       end
+       
+       Rayfield:Notify({
+           Title = "Store Sale Information",
+           Content = saleText,
+           Duration = 6.5,
+           Image = 4483362458,
+           Actions = {
+               Ignore = {
+                   Name = "K",
+                   Callback = function()
+                       print("Tell Your Friends To join Tokyo hub v3 for Premium version")
+                   end
+               }
+           }
+       })
+   end
+})
