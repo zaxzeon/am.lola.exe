@@ -1,0 +1,36 @@
+
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "Display Name Changer",
+    LoadingTitle = "Loading Interface...",
+    LoadingSubtitle = "by am.lola",
+    ConfigurationSaving = {
+        Enabled = false,
+        FolderName = nil,
+        FileName = nil
+    },
+    Discord = {
+        Enabled = false,
+        Invite = nil,
+        RememberJoins = true
+    },
+    KeySystem = false
+})
+
+local MainTab = Window:CreateTab("Main", 4483362458)
+
+local NameSection = MainTab:CreateSection("Change Display Name")
+
+local TextBox = MainTab:CreateInput({
+    Name = "Enter the name you want",
+    PlaceholderText = "New display name...",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        if Text and #Text > 0 then
+            game:GetService("Players").LocalPlayer.DisplayName = Text
+        end
+    end,
+})
+
+Rayfield:LoadConfiguration()
