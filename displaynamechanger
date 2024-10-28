@@ -1,36 +1,114 @@
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
 
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
 
-local Window = Rayfield:CreateWindow({
-    Name = "Display Name Changer",
-    LoadingTitle = "Loading Interface...",
-    LoadingSubtitle = "by am.lola",
-    ConfigurationSaving = {
-        Enabled = false,
-        FolderName = nil,
-        FileName = nil
-    },
-    Discord = {
-        Enabled = false,
-        Invite = nil,
-        RememberJoins = true
-    },
-    KeySystem = false
-})
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+MainFrame.BorderSizePixel = 0
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Active = true
+MainFrame.Draggable = true
 
-local MainTab = Window:CreateTab("Main", 4483362458)
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Title.BorderSizePixel = 0
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Font = Enum.Font.GothamSemibold
+Title.Text = "Draggable GUI"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 16
 
-local NameSection = MainTab:CreateSection("Change Display Name")
+-- Mobile touch input handling
+local UserInputService = game:GetService("UserInputService")
+local dragToggle = nil
+local dragStart = nil
+local startPos = nil
 
-local TextBox = MainTab:CreateInput({
-    Name = "Enter the name you want",
-    PlaceholderText = "New display name...",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Text)
-        if Text and #Text > 0 then
-            game:GetService("Players").LocalPlayer.DisplayName = Text
+local function updateInput(input)
+    local delta = input.Position - dragStart
+    local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+        startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    game:GetService('TweenService'):Create(MainFrame, TweenInfo.new(0.1), {Position = position}):Play()
+end
+
+MainFrame.InputBegan:Connect(function(input)
+    if (input.UserInputType == Enum.UserInputType.MouseButton1 or 
+        input.UserInputType == Enum.UserInputType.Touch) then
+        dragToggle = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragToggle = false
+            end
+        end)
+    end
+end)
+
+MainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or
+        input.UserInputType == Enum.UserInputType.Touch then
+        if dragToggle then
+            updateInput(input)
         end
-    end,
-})
+    end
+end)
 
-Rayfield:LoadConfiguration()
+local Label = Instance.new("TextLabel")
+Label.Name = "Label"
+Label.Parent = MainFrame
+Label.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Label.BorderSizePixel = 0
+Label.Position = UDim2.new(0, 0, 0.2, 0)
+Label.Size = UDim2.new(1, 0, 0, 30)
+Label.Font = Enum.Font.GothamSemibold
+Label.Text = "Display Name Changer"
+Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+Label.TextSize = 16
+
+local TextBox = Instance.new("TextBox")
+TextBox.Name = "NameTextBox"
+TextBox.Parent = MainFrame
+TextBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+TextBox.BorderSizePixel = 0
+TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
+TextBox.Size = UDim2.new(0.8, 0, 0, 30)
+TextBox.Font = Enum.Font.GothamSemibold
+TextBox.PlaceholderText = "Enter new display name..."
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 14
+local ChangeButton = Instance.new("TextButton")
+ChangeButton.Name = "ChangeButton"
+ChangeButton.Parent = MainFrame
+ChangeButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+ChangeButton.BorderSizePixel = 0
+ChangeButton.Position = UDim2.new(0.1, 0, 0.6, 0)
+ChangeButton.Size = UDim2.new(0.8, 0, 0, 30)
+ChangeButton.Font = Enum.Font.GothamSemibold
+ChangeButton.Text = "Change Display Name"
+ChangeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ChangeButton.TextSize = 14
+
+ChangeButton.MouseButton1Click:Connect(function()
+    local newName = TextBox.Text
+    if newName ~= "" then
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        
+        -- Use SetAttribute to change the display name
+        player:SetAttribute("DisplayName", newName)
+        
+        -- Optional feedback
+        TextBox.Text = ""
+        TextBox.PlaceholderText = "Display name changed!"
+        wait(2)
+        TextBox.PlaceholderText = "Enter new display name..."
+    end
+end)
