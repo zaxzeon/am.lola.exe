@@ -316,65 +316,60 @@ Tab:CreateButton({
        })
    end
 })
+  local selectedPlayer = nil
 
+  local PlayerSlider = Tab:CreateSlider({
+   Name = "Select Player",
+   Range = {1, #game.Players:GetPlayers()},
+   Increment = 1,
+   Suffix = "Selected",
+   CurrentValue = 1,
+   Flag = "PlayerSlider",
+   Callback = function(Value)
+       selectedPlayer = game.Players:GetPlayers()[Value]
+   end,
+  })
 
-Tab:CreateDropdown({
-    Name = "Select Player",
-    Options = game:GetService("Players"):GetPlayers(),
-    Default = "",
-    Flag = "PlayerDropdown",
-    Callback = function(Value)
-        _G.SelectedPlayer = Value
-    end    
-})
-
-Tab:CreateButton({
-    Name = "Get Player Info",
-    Callback = function()
-        local player = game:GetService("Players"):FindFirstChild(_G.SelectedPlayer)
-        if player then
-            local info = "Player Information:\n\n"
-            info = info .. "Username: " .. player.Name .. "\n"
-            info = info .. "Display Name: " .. player.DisplayName .. "\n"
-            info = info .. "User ID: " .. player.UserId .. "\n"
-            info = info .. "Account Age: " .. player.AccountAge .. " days\n"
-            info = info .. "Team: " .. (player.Team and player.Team.Name or "None") .. "\n"
-            info = info .. "Health: " .. math.floor(player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health or 0) .. "\n"
-            info = info .. "Max Health: " .. math.floor(player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.MaxHealth or 0) .. "\n"
-            info = info .. "Level: " .. (player.leaderstats and player.leaderstats:FindFirstChild("Level") and player.leaderstats.Level.Value or "N/A") .. "\n"
-            info = info .. "Position: " .. tostring(player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character.HumanoidRootPart.Position or Vector3.new(0,0,0))
-
-            Rayfield:Notify({
-                Title = "Player Information",
-                Content = info,
-                Duration = 10,
-                Image = 4483362458,
-                Actions = {
-                    Ignore = {
-                        Name = "Close",
-                        Callback = function()
-                        end
-                    }
-                }
-            })
-        end
-    end
-})
-
-local function UpdatePlayerList()
-    local PlayerList = {}
-    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
-        table.insert(PlayerList, player.Name)
-    end
-    local success, err = pcall(function()
-        Tab:Set({
-            Flag = "PlayerDropdown",
-            Values = PlayerList
-        })
-    end)
-end
-
-UpdatePlayerList()
-
-game:GetService("Players").PlayerAdded:Connect(UpdatePlayerList)
-game:GetService("Players").PlayerRemoving:Connect(UpdatePlayerList)
+  Tab:CreateButton({
+   Name = "Get Info",
+   Callback = function()
+       if selectedPlayer then
+           local accountAge = selectedPlayer.AccountAge
+           local membershipType = selectedPlayer.MembershipType.Name
+           local playerLevel = selectedPlayer.Data and selectedPlayer.Data.Level and selectedPlayer.Data.Level.Value or "N/A"
+           local playerBeli = selectedPlayer.Data and selectedPlayer.Data.Beli and selectedPlayer.Data.Beli.Value or "N/A"
+           local playerFragments = selectedPlayer.Data and selectedPlayer.Data.Fragments and selectedPlayer.Data.Fragments.Value or "N/A"
+           
+           local playerInfo = string.format([[
+  Player: %s
+  Account Age: %d days
+  Membership: %s
+  Level: %s
+  Beli: %s
+  Fragments: %s
+  ]], selectedPlayer.Name, accountAge, membershipType, tostring(playerLevel), tostring(playerBeli), tostring(playerFragments))
+           
+           Rayfield:Notify({
+               Title = "Player Detailed Information",
+               Content = playerInfo,
+               Duration = 6.5,
+               Image = 4483362458,
+               Actions = {
+                   Ignore = {
+                       Name = "K",
+                       Callback = function()
+                           print("Tell Your Friends To join Tokyo hub v3 for Premium version")
+                       end
+                   }
+               }
+           })
+       else
+           Rayfield:Notify({
+               Title = "Error",
+               Content = "Please select a player first!",
+               Duration = 3.0,
+               Image = 4483362458,
+           })
+       end
+   end
+  })
