@@ -12,11 +12,11 @@ local Window = Rayfield:CreateWindow({
    KeySettings = {
       Title = "Kyoshi Hub | Key System",
       Subtitle = "Key Required",
-      Note = "Join Discord for key: discord.gg/SCPkfkEeRF",
+      Note = "Join Discord for Prem Version: discord.gg/SCPkfkEeRF",
       FileName = "KyoshiKey",
       SaveKey = true,
-      GrabKeyFromSite = true,
-      Key = {"https://Discord.gg/SCPkfkEeRF"}
+      GrabKeyFromSite = false,
+      Key = {"KyoshiHubv3key"}
    }
 })
 
