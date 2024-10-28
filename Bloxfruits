@@ -320,7 +320,7 @@ Tab:CreateButton({
 
 Tab:CreateDropdown({
     Name = "Select Player",
-    Options = {""},
+    Options = game:GetService("Players"):GetPlayers(),
     Default = "",
     Flag = "PlayerDropdown",
     Callback = function(Value)
