@@ -12,11 +12,11 @@ local Window = Rayfield:CreateWindow({
    KeySettings = {
       Title = "Kyoshi Hub | Key System",
       Subtitle = "Key Required",
-      Note = "Enter Key",
+      Note = "Join Discord for key: discord.gg/SCPkfkEeRF",
       FileName = "KyoshiKey",
       SaveKey = true,
-      GrabKeyFromSite = false,
-      Key = "hi"
+      GrabKeyFromSite = true,
+      Key = {"https://Discord.gg/SCPkfkEeRF"}
    }
 })
 
@@ -27,16 +27,27 @@ local Toggle = Tab:CreateToggle({
   CurrentValue = false,
   Flag = "AutoFarmToggle",
   Callback = function(Value)
-     getgenv().AutoFarm = Value
-     if not Value then return end
-     while getgenv().AutoFarm do
-        local plr = game.Players.LocalPlayer
-        local char = plr.Character
-        if char and char:FindFirstChild("HumanoidRootPart") then
-           local level = plr.Data.Level.Value
+    getgenv().AutoFarm = Value
+    if not Value then return end
+    while getgenv().AutoFarm do
+       local plr = game.Players.LocalPlayer
+       local char = plr.Character
+       if char and char:FindFirstChild("HumanoidRootPart") then
+          local level = plr.Data.Level.Value
            
-           -- Equip melee weapon
-           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("EquipWeapon", "Combat")
+          -- Equip melee weapon
+          local backpack = plr.Backpack
+          for _, tool in pairs(backpack:GetChildren()) do
+              if tool:IsA("Tool") and tool.ToolTip == "Melee" then
+                  char.Humanoid:EquipTool(tool)
+                  break
+              end
+          end
+           
+          -- Fast autotap
+          game:GetService("VirtualUser"):CaptureController()
+          game:GetService("VirtualUser"):ClickButton1(Vector2.new(50,50))
+          game:GetService("RunService").RenderStepped:Wait()
            
            if level == 1 then
                -- Farm Bandits
@@ -161,7 +172,6 @@ local Toggle = Tab:CreateToggle({
      end
   end
 })
-
 Tab:CreateButton({
    Name = "Get Level",
    Callback = function()
