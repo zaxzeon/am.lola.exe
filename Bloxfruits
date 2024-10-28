@@ -1,28 +1,22 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-
 local Window = Rayfield:CreateWindow({
-   Name = "kyoshi Blox Fruits Version",
-   LoadingTitle = "kyoshi Blox Fruits",
-   LoadingSubtitle = "by kyoshi",
+   Name = "Kyoshi Hub | Blox Fruits",
+   LoadingTitle = "Kyoshi Hub",
+   LoadingSubtitle = "by Kyoshi",
    ConfigurationSaving = {
       Enabled = true,
-      FolderName = "kyoshiConfig",
+      FolderName = "KyoshiHub",
       FileName = "BloxFruits"
    },
    KeySystem = true,
    KeySettings = {
-      Title = "kyoshi Blox Fruits Key",
-      Subtitle = "Enter Key",
-      Note = "Get key from the button below",
-      Key = "hi",
-      Actions = {
-         [1] = {
-            Text = "Get Key",
-            Callback = function()
-               setclipboard("hi")
-            end,
-         }
-      }
+      Title = "Kyoshi Hub | Key System",
+      Subtitle = "Key Required",
+      Note = "Enter Key",
+      FileName = "KyoshiKey",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = "hi"
    }
 })
 
