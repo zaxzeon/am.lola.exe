@@ -1,125 +1,71 @@
 local ScreenGui = Instance.new("ScreenGui")
-local MainFrame = Instance.new("Frame")
-local Title = Instance.new("TextLabel")
+local Frame = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local UICorner = Instance.new("UICorner")
 
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 
-MainFrame.Name = "MainFrame"
-MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-MainFrame.BorderSizePixel = 0
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
-MainFrame.Size = UDim2.new(0, 300, 0, 200)
-MainFrame.Active = true
-MainFrame.Draggable = true
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+Frame.Position = UDim2.new(0.5, -100, 0.5, -25)
+Frame.Size = UDim2.new(0, 200, 0, 50)
+Frame.Active = true
+Frame.Draggable = true
 
-Title.Name = "Title"
-Title.Parent = MainFrame
-Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-Title.BorderSizePixel = 0
-Title.Size = UDim2.new(1, 0, 0, 30)
-Title.Font = Enum.Font.GothamSemibold
-Title.Text = "Draggable GUI"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 16
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+TextBox.Position = UDim2.new(0.05, 0, 0.1, 0)
+TextBox.Size = UDim2.new(0.9, 0, 0.8, 0)
+TextBox.Font = Enum.Font.GothamSemibold
+TextBox.PlaceholderText = "Enter Display Name..."
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 14.000
 
--- Mobile touch input handling
-local UserInputService = game:GetService("UserInputService")
-local dragToggle = nil
-local dragStart = nil
-local startPos = nil
+UICorner.Parent = Frame
+UICorner.CornerRadius = UDim.new(0, 8)
 
-local function updateInput(input)
-    local delta = input.Position - dragStart
-    local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-        startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    game:GetService('TweenService'):Create(MainFrame, TweenInfo.new(0.1), {Position = position}):Play()
+local function changeDisplayName()
+    local player = game.Players.LocalPlayer
+    local newName = TextBox.Text
+    
+    if newName ~= "" then
+        -- Using SetAttribute to replicate the display name change to all players
+        player:SetAttribute("DisplayName", newName)
+        
+        -- Create a RemoteEvent to handle the replication
+        local event = Instance.new("RemoteEvent", player)
+        event.Name = "UpdateDisplayName"
+        
+        -- Fire the event to all players
+        game.ReplicatedStorage.RemoteEvent:FireServer(newName)
+    end
 end
 
-MainFrame.InputBegan:Connect(function(input)
-    if (input.UserInputType == Enum.UserInputType.MouseButton1 or 
-        input.UserInputType == Enum.UserInputType.Touch) then
-        dragToggle = true
-        dragStart = input.Position
-        startPos = MainFrame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragToggle = false
-            end
-        end)
+TextBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        changeDisplayName()
     end
 end)
 
-MainFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or
-        input.UserInputType == Enum.UserInputType.Touch then
-        if dragToggle then
-            updateInput(input)
-        end
-    end
-end)
-
-local Label = Instance.new("TextLabel")
-Label.Name = "Label"
-Label.Parent = MainFrame
-Label.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-Label.BorderSizePixel = 0
-Label.Position = UDim2.new(0, 0, 0.2, 0)
-Label.Size = UDim2.new(1, 0, 0, 30)
-Label.Font = Enum.Font.GothamSemibold
-Label.Text = "Display Name Changer"
-Label.TextColor3 = Color3.fromRGB(255, 255, 255)
-Label.TextSize = 16
-    local TextBox = Instance.new("TextBox")
-    TextBox.Name = "NameTextBox"
-    TextBox.Parent = MainFrame
-    TextBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    TextBox.BorderSizePixel = 0
-    TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
-    TextBox.Size = UDim2.new(0.8, 0, 0, 30)
-    TextBox.Font = Enum.Font.GothamSemibold
-    TextBox.PlaceholderText = "Enter new display name..."
-    TextBox.Text = ""
-    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TextBox.TextSize = 14
-
-    local ChangeButton = Instance.new("TextButton")
-    ChangeButton.Name = "ChangeButton"
-    ChangeButton.Parent = MainFrame
-    ChangeButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    ChangeButton.BorderSizePixel = 0
-    ChangeButton.Position = UDim2.new(0.1, 0, 0.6, 0)
-    ChangeButton.Size = UDim2.new(0.8, 0, 0, 30)
-    ChangeButton.Font = Enum.Font.GothamSemibold
-    ChangeButton.Text = "Change Display Name"
-    ChangeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ChangeButton.TextSize = 14
-
-    ChangeButton.MouseButton1Click:Connect(function()
-        local newName = TextBox.Text
-        if newName ~= "" then
-            local Players = game:GetService("Players")
-            local player = Players.LocalPlayer
-            
-            -- Change overhead character name
-            if player.Character and player.Character:FindFirstChild("Head") then
-                if player.Character.Head:FindFirstChild("DisplayNameGui") then
-                    player.Character.Head.DisplayNameGui.Frame.NameLabel.Text = newName
-                end
-            end
-        
-            -- Use Remote Event to change display name server-side
-            local args = {
-                [1] = "UpdateDisplayName",
-                [2] = newName
-            }
-            game:GetService("ReplicatedStorage"):WaitForChild("ChangeDisplayName"):FireServer(unpack(args))
-        
-            -- Optional feedback
-            TextBox.Text = ""
-            TextBox.PlaceholderText = "Display name changed!"
-            wait(2)
-            TextBox.PlaceholderText = "Enter new display name..."
+-- Handle the display name updates for all players
+game.Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        local humanoid = character:WaitForChild("Humanoid")
+        local displayName = player:GetAttribute("DisplayName")
+        if displayName then
+            humanoid.DisplayName = displayName
         end
     end)
+end)
+
+-- Update display names when attributes change
+game.Players.LocalPlayer.AttributeChanged:Connect(function(attribute)
+    if attribute == "DisplayName" then
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.DisplayName = player:GetAttribute("DisplayName")
+        end
+    end
+end)
