@@ -101,6 +101,13 @@ Label.TextSize = 16
         if newName ~= "" then
             local Players = game:GetService("Players")
             local player = Players.LocalPlayer
+            
+            -- Change overhead character name
+            if player.Character and player.Character:FindFirstChild("Head") then
+                if player.Character.Head:FindFirstChild("DisplayNameGui") then
+                    player.Character.Head.DisplayNameGui.Frame.NameLabel.Text = newName
+                end
+            end
         
             -- Use Remote Event to change display name server-side
             local args = {
