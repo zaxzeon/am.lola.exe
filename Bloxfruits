@@ -33,8 +33,6 @@ local Toggle = Tab:CreateToggle({
        local plr = game.Players.LocalPlayer
        local char = plr.Character
        if char and char:FindFirstChild("HumanoidRootPart") then
-          local level = plr.Data.Level.Value
-           
           -- Equip melee weapon
           local backpack = plr.Backpack
           for _, tool in pairs(backpack:GetChildren()) do
@@ -49,129 +47,55 @@ local Toggle = Tab:CreateToggle({
           game:GetService("VirtualUser"):ClickButton1(Vector2.new(50,50))
           game:GetService("RunService").RenderStepped:Wait()
            
-           if level == 1 then
-               -- Farm Bandits
-               for _, v in pairs(workspace.Enemies:GetChildren()) do
-                   if v.Name == "Bandit" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                       repeat
-                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
-                           game:GetService("VirtualUser"):CaptureController()
-                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                           wait()
-                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-                   end
-               end
-           elseif level >= 2 and level < 10 then
-               -- Farm Jungle Pirates
-               for _, v in pairs(workspace.Enemies:GetChildren()) do
-                   if v.Name == "Jungle Pirate" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                       repeat
-                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
-                           game:GetService("VirtualUser"):CaptureController()
-                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                           wait()
-                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-                   end
-               end
-           elseif level >= 10 and level < 15 then
-               -- Farm Gorilla
-               for _, v in pairs(workspace.Enemies:GetChildren()) do
-                   if v.Name == "Gorilla" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                       repeat
-                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
-                           game:GetService("VirtualUser"):CaptureController()
-                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                           wait()
-                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-                   end
-               end
-           elseif level >= 15 and level < 30 then
-               -- Farm Gorilla King
-               for _, v in pairs(workspace.Enemies:GetChildren()) do
-                   if v.Name == "Gorilla King" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                       repeat
-                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
-                           game:GetService("VirtualUser"):CaptureController()
-                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                           wait()
-                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-                   end
-               end
-           elseif level >= 30 and level < 40 then
-               -- Farm Pirate
-               for _, v in pairs(workspace.Enemies:GetChildren()) do
-                   if v.Name == "Pirate" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                       repeat
-                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
-                           game:GetService("VirtualUser"):CaptureController()
-                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                           wait()
-                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-                   end
-               end
-           elseif level >= 40 and level < 60 then
-               -- Farm Brute
-               for _, v in pairs(workspace.Enemies:GetChildren()) do
-                   if v.Name == "Brute" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                       repeat
-                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
-                           game:GetService("VirtualUser"):CaptureController()
-                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                           wait()
-                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-                   end
-               end
-           elseif level >= 60 and level < 75 then
-               -- Farm Desert Bandit
-               for _, v in pairs(workspace.Enemies:GetChildren()) do
-                   if v.Name == "Desert Bandit" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                       repeat
-                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
-                           game:GetService("VirtualUser"):CaptureController()
-                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                           wait()
-                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-                   end
-               end
-           elseif level >= 75 and level < 90 then
-               -- Farm Desert Officer
-               for _, v in pairs(workspace.Enemies:GetChildren()) do
-                   if v.Name == "Desert Officer" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                       repeat
-                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
-                           game:GetService("VirtualUser"):CaptureController()
-                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                           wait()
-                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-                   end
-               end
-           elseif level >= 90 and level <= 100 then
-               -- Farm Desert King
-               for _, v in pairs(workspace.Enemies:GetChildren()) do
-                   if v.Name == "Desert King" and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                       repeat
-                           char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                           game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
-                           game:GetService("VirtualUser"):CaptureController()
-                           game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                           wait()
-                       until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-                   end
-               end
-           end
+          -- Farm based on level
+          local level = plr.Data.Level.Value
+          local target = ""
+          
+          if level < 60 then
+              target = "Bandit"
+          elseif level >= 60 and level < 75 then
+              target = "Desert Bandit"
+          elseif level >= 75 and level < 90 then
+              target = "Desert Officer" 
+          elseif level >= 90 and level < 100 then
+              target = "Desert King"
+          elseif level >= 100 and level < 120 then
+              target = "Snow Bandit"
+          elseif level >= 120 and level < 150 then
+              target = "Snow Warrior"
+          elseif level >= 150 and level < 200 then
+              target = "Marine"
+          elseif level >= 200 and level < 250 then
+              target = "Dark Master"
+          elseif level >= 250 and level < 300 then
+              target = "Toga Warrior"
+          elseif level >= 300 and level < 350 then
+              target = "Military Soldier"
+          elseif level >= 350 and level < 400 then
+              target = "Military Spy"
+          elseif level >= 400 and level < 450 then
+              target = "Fishman Warrior"
+          elseif level >= 450 and level < 500 then
+              target = "Fishman Commando"
+          end
+          
+          for _, v in pairs(workspace.Enemies:GetChildren()) do
+              if v.Name == target and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                  repeat
+                      char.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                      game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
+                      game:GetService("VirtualUser"):CaptureController()
+                      game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+                      wait()
+                  until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+              end
+          end
         end
         wait()
      end
   end
 })
+
 Tab:CreateButton({
    Name = "Get Level",
    Callback = function()
@@ -184,10 +108,27 @@ Tab:CreateButton({
            island = "Desert Area"
        elseif level >= 75 and level < 90 then
            island = "Desert Area (Officer Zone)"
-       elseif level >= 90 and level <= 100 then
+       elseif level >= 90 and level < 100 then
            island = "Desert Area (King's Territory)"
-       end
-       
+       elseif level >= 100 and level < 120 then
+           island = "Snow Mountain"
+       elseif level >= 120 and level < 150 then
+           island = "Snow Mountain (Warrior Zone)"
+       elseif level >= 150 and level < 200 then
+           island = "Marine Base"
+       elseif level >= 200 and level < 250 then
+           island = "Dark Area"
+       elseif level >= 250 and level < 300 then
+           island = "Toga Kingdom"
+       elseif level >= 300 and level < 350 then
+           island = "Military Base"
+       elseif level >= 350 and level < 400 then
+           island = "Military Base (Spy Zone)"
+       elseif level >= 400 and level < 450 then
+           island = "Fishman Village"
+       elseif level >= 450 and level < 500 then
+           island = "Fishman Village (Commando Zone)"
+       end       
        Rayfield:Notify({
            Title = "Level Information",
            Content = "You are level " .. level .. " which means you should be at " .. island,
