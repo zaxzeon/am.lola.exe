@@ -316,8 +316,6 @@ Tab:CreateButton({
        })
    end
 })
-  local selectedPlayer = nil
-
   local PlayerDropdown = Tab:CreateDropdown({
       Name = "Select Player",
       Options = {},
@@ -327,6 +325,34 @@ Tab:CreateButton({
           for _, player in pairs(game.Players:GetPlayers()) do
               if player.Name == Value then
                   selectedPlayer = player
+                  local accountAge = player.AccountAge
+                  local userId = player.UserId
+                  local displayName = player.DisplayName
+                  local healthPercent = math.floor((player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health or 0) / (player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.MaxHealth or 100) * 100)
+                
+                  local playerInfo = string.format(
+                      "Account Information:\nDisplay Name: %s\nUsername: %s\nUser ID: %s\nAccount Age: %d days\n\nGame Information:\nHealth: %d%%\nTeam: %s\nLevel: %s",
+                      displayName,
+                      player.Name,
+                      userId,
+                      accountAge,
+                      healthPercent,
+                      player.Team and player.Team.Name or "None",
+                      player.leaderstats and player.leaderstats:FindFirstChild("Level") and player.leaderstats.Level.Value or "N/A"
+                  )
+                
+                  Rayfield:Notify({
+                      Title = "Player Information",
+                      Content = playerInfo,
+                      Duration = 10,
+                      Image = 4483362458,
+                      Actions = {
+                          Ignore = {
+                              Name = "Close",
+                              Callback = function() end
+                          }
+                      }
+                  })
                   break
               end
           end
@@ -345,47 +371,3 @@ Tab:CreateButton({
   UpdatePlayerList()
   game.Players.PlayerAdded:Connect(UpdatePlayerList)
   game.Players.PlayerRemoving:Connect(UpdatePlayerList)
-
-  Tab:CreateButton({
-      Name = "Get Info",
-      Callback = function()
-          if selectedPlayer then
-              local accountAge = selectedPlayer.AccountAge
-              local membershipType = selectedPlayer.MembershipType.Name
-              local playerLevel = selectedPlayer.Data and selectedPlayer.Data.Level and selectedPlayer.Data.Level.Value or "N/A"
-              local playerBeli = selectedPlayer.Data and selectedPlayer.Data.Beli and selectedPlayer.Data.Beli.Value or "N/A"
-              local playerFragments = selectedPlayer.Data and selectedPlayer.Data.Fragments and selectedPlayer.Data.Fragments.Value or "N/A"
-            
-              local playerInfo = string.format([[
-  Player: %s
-  Account Age: %d days
-  Membership: %s
-  Level: %s
-  Beli: %s
-  Fragments: %s
-  ]], selectedPlayer.Name, accountAge, membershipType, tostring(playerLevel), tostring(playerBeli), tostring(playerFragments))
-            
-              Rayfield:Notify({
-                  Title = "Player Detailed Information",
-                  Content = playerInfo,
-                  Duration = 6.5,
-                  Image = 4483362458,
-                  Actions = {
-                      Ignore = {
-                          Name = "K",
-                          Callback = function()
-                              print("Tell Your Friends To join Tokyo hub v3 for Premium version")
-                          end
-                      }
-                  }
-              })
-          else
-              Rayfield:Notify({
-                  Title = "Error",
-                  Content = "Please select a player first!",
-                  Duration = 3.0,
-                  Image = 4483362458,
-              })
-          end
-      end
-  })
