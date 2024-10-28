@@ -21,7 +21,7 @@ local Window = Rayfield:CreateWindow({
 })
 
 local Tab = Window:CreateTab("Main", 11446825283) -- Second argument is the image ID
-local Section = Tab:CreateSection("Main")
+local Section = Tab:CreateSection("AutoFarm")
 local Toggle = Tab:CreateToggle({
   Name = "AutoFarm",
   CurrentValue = false,
@@ -96,6 +96,42 @@ local Toggle = Tab:CreateToggle({
   end
 })
 
+Tab:CreateToggle({
+   Name = "Auto Farm Spawned Fruit",
+   CurrentValue = false,
+   Flag = "AutoFarmFruit",
+   Callback = function(Value)
+       getgenv().AutoFarmFruit = Value
+       
+       while getgenv().AutoFarmFruit and task.wait() do
+           for _, v in pairs(game:GetService("Workspace"):GetChildren()) do
+               if string.find(v.Name, "Fruit") and getgenv().AutoFarmFruit then
+                   local humanoidRootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+                   local targetPosition = v.Handle.Position
+                   
+                   -- Calculate distance
+                   local distance = (humanoidRootPart.Position - targetPosition).Magnitude
+                   local tweenInfo = TweenInfo.new(distance/200, Enum.EasingStyle.Linear)
+                   
+                   -- Create and play tween
+                   local tween = game:GetService("TweenService"):Create(
+                       humanoidRootPart,
+                       tweenInfo,
+                       {CFrame = CFrame.new(targetPosition)}
+                   )
+                   if getgenv().AutoFarmFruit then
+                       tween:Play()
+                       tween.Completed:Wait()
+                   else
+                       tween:Cancel()
+                       break
+                   end
+               end
+           end
+       end
+   end
+})
+
 local Section = Tab:CreateSection("Get")
 Tab:CreateButton({
    Name = "Get Level",
@@ -154,7 +190,11 @@ Tab:CreateButton({
        local saleText = "Current Store Items:\n"
        
        for i,v in pairs(store) do
-           saleText = saleText .. v.Name .. " - " .. v.Price .. " Beli\n"
+           if v.OnSale then
+               saleText = saleText .. v.Name .. " - " .. v.Price .. " Beli (ON SALE!)\n"
+           else
+               saleText = saleText .. v.Name .. " - " .. v.Price .. " Beli\n"
+           end
        end
        
        Rayfield:Notify({
@@ -172,4 +212,149 @@ Tab:CreateButton({
            }
        })
    end
+})
+
+Tab:CreateButton({
+   Name = "Get Spawned Fruits",
+   Callback = function()
+       local fruits = game:GetService("Workspace"):GetChildren()
+       local spawnedFruits = "Currently Spawned Fruits:\n"
+       local fruitCount = 0
+       
+       for i,v in pairs(fruits) do
+           if string.find(v.Name, "Fruit") then
+               spawnedFruits = spawnedFruits .. v.Name .. "\n"
+               fruitCount = fruitCount + 1
+           end
+       end
+       
+       if fruitCount == 0 then
+           spawnedFruits = "No fruits are currently spawned in the world"
+       end
+       
+       Rayfield:Notify({
+           Title = "Spawned Fruits Information",
+           Content = spawnedFruits,
+           Duration = 6.5,
+           Image = 4483362458,
+           Actions = {
+               Ignore = {
+                   Name = "K",
+                   Callback = function()
+                       print("Tell Your Friends To join Tokyo hub v3 for Premium version")
+                   end
+               }
+           }
+       })
+   end
+})
+
+Tab:CreateButton({
+   Name = "Get Players",
+   Callback = function()
+       local players = game:GetService("Players"):GetPlayers()
+       local playerCount = #players
+       local playerList = "Players in Game (" .. playerCount .. "):\n"
+       
+       for _, player in pairs(players) do
+           playerList = playerList .. player.Name .. "\n"
+       end
+       
+       Rayfield:Notify({
+           Title = "Player Information",
+           Content = playerList,
+           Duration = 6.5,
+           Image = 4483362458,
+           Actions = {
+               Ignore = {
+                   Name = "K",
+                   Callback = function()
+                       print("Tell Your Friends To join Tokyo hub v3 for Premium version PLEASE")
+                   end
+               }
+           }
+       })
+   end
+})
+
+local selectedPlayer = nil
+
+local function updatePlayerList()
+    local players = game:GetService("Players"):GetPlayers()
+    local playerNames = {}
+    for i, player in ipairs(players) do
+        table.insert(playerNames, player.Name)
+    end
+    return playerNames
+end
+
+local PlayerSlider = Tab:CreateDropdown({
+    Name = "Select Player",
+    Options = updatePlayerList(),
+    CurrentOption = "",
+    Flag = "PlayerSlider",
+    Callback = function(Value)
+        selectedPlayer = Value
+    end,
+})
+
+Tab:CreateButton({
+    Name = "Refresh Players",
+    Callback = function()
+        PlayerSlider:Refresh(updatePlayerList(), true)
+    end
+})
+
+Tab:CreateButton({
+    Name = "Get Player Fruit and Melee",
+    Callback = function()
+        if selectedPlayer then
+            local player = game:GetService("Players"):FindFirstChild(selectedPlayer)
+            if player then
+                local backpack = player:FindFirstChild("Backpack")
+                local character = player.Character
+                local fruitFound = "No fruit found"
+                local meleeFound = "No melee found"
+                
+                local function searchTools(container)
+                    if container then
+                        for _, tool in pairs(container:GetChildren()) do
+                            if tool:FindFirstChild("FruitEat") then
+                                fruitFound = tool.Name
+                            elseif tool:FindFirstChild("Melee") then
+                                meleeFound = tool.Name
+                            end
+                        end
+                    end
+                end
+                
+                searchTools(backpack)
+                if character then
+                    searchTools(character)
+                end
+                
+                Rayfield:Notify({
+                    Title = selectedPlayer .. "'s Information",
+                    Content = "Fruit: " .. fruitFound .. "\nMelee: " .. meleeFound,
+                    Duration = 6.5,
+                    Image = 4483362458,
+                    Actions = {
+                        Ignore = {
+                            Name = "K",
+                            Callback = function()
+                                print("Tell Your Friends To join Tokyo hub v3 for Premium version")
+                            end
+                        }
+                    }
+                })
+            end
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Please select a player first",
+                Duration = 3,
+                Image = 4483362458
+            })
+        end
+    end
 })
