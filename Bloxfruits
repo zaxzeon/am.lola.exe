@@ -86,12 +86,12 @@ local Toggle = Tab:CreateToggle({
                       game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Combat", v)
                       game:GetService("VirtualUser"):CaptureController()
                       game:GetService("VirtualUser"):ClickButton1(Vector2.new())
-                      wait()
+                      task.wait()
                   until not getgenv().AutoFarm or not v or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
               end
           end
         end
-        wait()
+        task.wait()
      end
   end
 })
