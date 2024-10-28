@@ -358,17 +358,22 @@ Tab:CreateButton({
                 
                 local function searchTools(container)
                     if container then
-                        for _, tool in pairs(container:GetChildren()) do
-                            if tool:FindFirstChild("FruitEat") then
-                                fruitFound = tool.Name
-                            elseif tool:FindFirstChild("Melee") then
-                                meleeFound = tool.Name
+                        for _, tool in ipairs(container:GetChildren()) do
+                            for _, item in ipairs(tool:GetChildren()) do
+                                if item.Name == "FruitEat" then
+                                    fruitFound = tool.Name
+                                end
+                                if item.Name == "Melee" then
+                                    meleeFound = tool.Name
+                                end
                             end
                         end
                     end
                 end
                 
-                searchTools(backpack)
+                if backpack then
+                    searchTools(backpack)
+                end
                 if character then
                     searchTools(character)
                 end
