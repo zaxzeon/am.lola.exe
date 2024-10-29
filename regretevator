@@ -21,3 +21,33 @@ local Tabs = {
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
+local AutoLevel = Tabs.Level:AddToggle("AutoLevel", {
+    Title = "Auto Level",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoLevel = Value
+        while _G.AutoLevel and task.wait() do
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            
+            -- Get the elevator model/part
+            local elevator = workspace:FindFirstChild("Elevator")
+            if elevator then
+                -- Teleport to next level trigger
+                local nextLevel = workspace:FindFirstChild("NextLevel")
+                if nextLevel then
+                    character:PivotTo(nextLevel.CFrame)
+                end
+                
+                -- Complete current level
+                local complete = workspace:FindFirstChild("Complete")
+                if complete then
+                    character:PivotTo(complete.CFrame)
+                end
+                
+                -- Wait for level transition
+                task.wait(1)
+            end
+        end
+    end
+})
