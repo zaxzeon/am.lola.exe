@@ -1,0 +1,96 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Window = Rayfield:CreateWindow({
+   Name = "Regreatator script by PackGodJR",
+   LoadingTitle = "Regreatator script",
+   LoadingSubtitle = "by PackGodJR for ChaoticJR",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil,
+      FileName = "Regreatator"
+   }
+})
+
+local Tab = Window:CreateTab("Main", 4483362458)
+local Section = Tab:CreateSection("Regreatator")
+local Toggle = Tab:CreateToggle({
+   Name = "Auto Complete Floor",
+   CurrentValue = false,
+   Flag = "AutoComplete",
+   Callback = function(Value)
+      if Value then
+         spawn(function()
+            while task.wait() do
+               if not Toggle.CurrentValue then break end
+               local player = game.Players.LocalPlayer
+               local character = player.Character or player.CharacterAdded:Wait()
+               
+               -- Find all possible finish parts/triggers
+               local finishParts = {
+                  workspace:FindFirstChild("Finish"),
+                  workspace:FindFirstChild("End"),
+                  workspace:FindFirstChild("Goal"),
+                  workspace:FindFirstChild("LevelEnd"),
+                  workspace:FindFirstChild("EndPoint"),
+                  workspace:FindFirstChild("Victory")
+               }
+               
+               for _, finish in pairs(finishParts) do
+                  if finish then
+                     -- Teleport to finish
+                     character:PivotTo(finish.CFrame)
+                     
+                     -- Touch the finish part
+                     firetouchinterest(character.HumanoidRootPart, finish, 0)
+                     task.wait()
+                     firetouchinterest(character.HumanoidRootPart, finish, 1)
+                     break
+                  end
+               end
+               
+               -- Also check for finish parts in subfolders
+               for _, descendant in pairs(workspace:GetDescendants()) do
+                  if descendant.Name:lower():match("finish") or descendant.Name:lower():match("end") or descendant.Name:lower():match("goal") then
+                     character:PivotTo(descendant.CFrame)
+                     firetouchinterest(character.HumanoidRootPart, descendant, 0)
+                     task.wait()
+                     firetouchinterest(character.HumanoidRootPart, descendant, 1)
+                     break
+                  end
+               end
+               
+               -- Wait before next attempt
+               task.wait(1)
+            end
+         end)
+      end
+   end,
+})
+
+local Toggle = Tabs.Main:AddToggle("GetCoins", {
+   Title = "Get All Coins",
+   Default = false,
+   
+   Callback = function(Value)
+      if Value then
+         spawn(function()
+            while task.wait() do
+               if not Toggle.CurrentValue then break end
+               local player = game.Players.LocalPlayer
+               local character = player.Character or player.CharacterAdded:Wait()
+               
+               -- Find and collect all coins in workspace
+               for _, coin in pairs(workspace:GetDescendants()) do
+                  if coin.Name:lower():match("coin") then
+                     character:PivotTo(coin.CFrame)
+                     firetouchinterest(character.HumanoidRootPart, coin, 0)
+                     task.wait()
+                     firetouchinterest(character.HumanoidRootPart, coin, 1)
+                  end
+               end
+               
+               task.wait(1)
+            end
+         end)
+      end
+   end,
+})
