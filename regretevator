@@ -1,12 +1,12 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
-   Name = "Regreatator script by PackGodJR",
-   LoadingTitle = "Regreatator script",
+   Name = "Regretevator script by PackGodJR",
+   LoadingTitle = "Regretevator script",
    LoadingSubtitle = "by PackGodJR for ChaoticJR",
    ConfigurationSaving = {
       Enabled = true,
       FolderName = nil,
-      FileName = "Regreatator"
+      FileName = "Regretevator"
    }
 })
 
