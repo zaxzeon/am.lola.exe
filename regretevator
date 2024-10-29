@@ -21,33 +21,57 @@ local Tabs = {
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
-local AutoLevel = Tabs.Level:AddToggle("AutoLevel", {
-    Title = "Auto Level",
+Tabs.Level:AddToggle("AutoComplete", {
+    Title = "Auto Complete All Levels",
     Default = false,
     Callback = function(Value)
-        _G.AutoLevel = Value
-        while _G.AutoLevel and task.wait() do
-            local player = game.Players.LocalPlayer
-            local character = player.Character or player.CharacterAdded:Wait()
+        _G.AutoComplete = Value
+        while _G.AutoComplete do
+            local levels = {
+                "Infinite Mine", "3008", "Aftereva", "Alien Projector", "Area 51", 
+                "Backrooms", "Ballpit", "Birthday Apartment", "Bomb Defusal",
+                "Bugbo", "Button Competition", "Cardboard Mansion", "CRUMBL CUBE",
+                "Curse Cove", "Dance Party", "Dodge Teh Teapots", "Dog Party",
+                "DREAM WORLD", "Drive-Thru", "Dummy Floor", "DW Museum",
+                "Elevator Shaft", "Elevator x5", "Eternal Limbo", "Find The Path",
+                "Fishy Aquarium", "Flood Fill Mine", "FNARB", "Four Corners",
+                "Frightening Floor", "Fun Flood at Squishy's", "Funny Maze",
+                "Floppy Shoppy", "Glorp N' Go", "Gumball Machine", "gm_flatgrass",
+                "HALL OF", "Happy Birthday?", "Happy Home Party", "HC Icecream",
+                "Hole In The Wall", "Hotel Floor", "Infected Apartment",
+                "Intense Obby", "Jeremy's Domain", "Jermpop Factory",
+                "Mannequin Room", "Minefield", "Mozelle's Humble Castle",
+                "Mysterious Ball Room", "OFFICE OF", "On The Heights",
+                "Other Elevator", "PET CAPTURE DELUXE", "Pure Cheesination",
+                "Random Maze", "Red Ball Pile", "Red Ball Temple",
+                "Reddy's Underground Diner", "Retrorade Security Station",
+                "Rock Park", "Sebastian's Wares", "Shop Space", "SharkCo Mall",
+                "Skyblock", "Slap Battles", "Slide 4 Admin", "Snackcore",
+                "Snowy Slope", "Sound of Sci-fi", "Space Dropper", "Splitsville!",
+                "Stanley Room", "Stats Domain", "Studio Obby", "Superhighway",
+                "Suspiciously Long Room", "Teapot Traversal",
+                "Temple of, Something", "The outside", "Toolbox Speedway",
+                "Toolbox Thrift", "Turret", "Two Stud Camp", "UES",
+                "Underground Subway", "WALL OF", "WHEEL OF"
+            }
             
-            -- Get the elevator model/part
-            local elevator = workspace:FindFirstChild("Elevator")
-            if elevator then
-                -- Teleport to next level trigger
-                local nextLevel = workspace:FindFirstChild("NextLevel")
-                if nextLevel then
-                    character:PivotTo(nextLevel.CFrame)
+            for _, level in ipairs(levels) do
+                game:GetService("ReplicatedStorage").RemoteEvents.CompleteLevel:FireServer(level)
+                
+                -- Auto find and click Jaoba boxes
+                if level == "Jeremy's Domain" then
+                    local workspace = game:GetService("Workspace")
+                    for _, v in pairs(workspace:GetDescendants()) do
+                        if v:IsA("ClickDetector") and v.Parent and v.Parent.Name:find("Jaoba") then
+                            fireclickdetector(v)
+                            wait(0.1)
+                        end
+                    end
                 end
                 
-                -- Complete current level
-                local complete = workspace:FindFirstChild("Complete")
-                if complete then
-                    character:PivotTo(complete.CFrame)
-                end
-                
-                -- Wait for level transition
-                task.wait(1)
+                wait(0.1)
             end
+            wait(1)
         end
     end
 })
