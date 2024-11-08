@@ -71,47 +71,34 @@ local ToolName = baseButton.ToolName
 
 ToolName.Text = "Limitless Uppercut"
 
+  local Players = game:GetService("Players")
 
-local Players = game:GetService("Players")
+  local player = Players.LocalPlayer
 
-local player = Players.LocalPlayer
-
-local playerGui = player:WaitForChild("PlayerGui")
+  local playerGui = player:WaitForChild("PlayerGui")
 
 
-local function findGuiAndSetText()
+  local function findGuiAndSetText()
 
-    local screenGui = playerGui:FindFirstChild("ScreenGui")
+      local screenGui = playerGui:FindFirstChild("ScreenGui")
 
-    if screenGui then
+      if screenGui then
 
-        local magicHealthFrame = screenGui:FindFirstChild("MagicHealth")
+          local magicHealthFrame = screenGui:FindFirstChild("MagicHealth")
 
-            local textLabel = magicHealthFrame:FindFirstChild("TextLabel")
+              local textLabel = magicHealthFrame:FindFirstChild("TextLabel")
 
-            if textLabel then
+              if textLabel then
 
-                local random = math.random(1, 100)
-                
-                if random <= 60 then
-                    textLabel.Text = "I am the honored one."
-                elseif random <= 80 then
-                    textLabel.Text = "You're strong."
-                elseif random <= 90 then
-                    textLabel.Text = "I'm unbeatable."
-                elseif random <= 95 then
-                    textLabel.Text = "I'm the strongest."
-                else
-                    textLabel.Text = "Hollow Purple."       
+                  textLabel.Text = "I am the honored one."
+                  magicHealthFrame.Health.Bar.Bar.ImageColor3 = Color3.fromRGB(math.random(0,255), math.random(0,255), math.random(0,255))
+              end
 
-            end
+          end
 
-        end
+      end
 
-    end
-
-end
-
+  end
 
 playerGui.DescendantAdded:Connect(findGuiAndSetText)
 
@@ -1083,3 +1070,50 @@ player.CharacterAdded:Connect(function(newCharacter)
     end
 
 end)
+  local ToolName = "Power Up"
+
+    local debounce = false
+    local t = Instance.new("Tool")
+    t.Name = ToolName
+    t.RequiresHandle = false
+    t.CanBeDropped = false
+    t.Parent = game.Players.LocalPlayer.Backpack
+    t.Activated:Connect(function()
+        if not debounce then
+            debounce = true
+        
+            local character = game.Players.LocalPlayer.Character
+            local head = character:WaitForChild("Head")
+        
+            local eyeGlow = Instance.new("ParticleEmitter")
+            eyeGlow.Name = "EyeGlow"
+            eyeGlow.Color = ColorSequence.new(Color3.fromRGB(0, 0, 255))
+            eyeGlow.LightEmission = 1
+            eyeGlow.LightInfluence = 0
+            eyeGlow.Size = NumberSequence.new(0.5)
+            eyeGlow.Texture = "rbxasset://textures/particles/fire_main.dds"
+            eyeGlow.Transparency = NumberSequence.new(0)
+            eyeGlow.ZOffset = 1
+            eyeGlow.Lifetime = NumberRange.new(0.5)
+            eyeGlow.Rate = 50
+            eyeGlow.Rotation = NumberRange.new(0, 360)
+            eyeGlow.RotSpeed = NumberRange.new(-30, 30)
+            eyeGlow.Speed = NumberRange.new(0)
+            eyeGlow.Parent = head
+            eyeGlow.Position = Vector3.new(0, 0.6, -0.6)
+        
+            wait(19)
+            -- Fade out over 1 second
+            local fadeTime = 1
+            local steps = 10
+            local waitTime = fadeTime/steps
+            
+            for i = 0, steps do
+                eyeGlow.Transparency = NumberSequence.new(i/steps)
+                wait(waitTime)
+            end
+            
+            eyeGlow:Destroy()
+            debounce = false
+        end
+    end)
