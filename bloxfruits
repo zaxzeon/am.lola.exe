@@ -1,0 +1,68 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Window = Fluent:CreateWindow({
+    Title = "Blox Fruits",
+    SubTitle = "Chaotic junior version",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeConfig = {
+        SizeX = 480,
+        SizeY = 460
+    }
+})
+
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main", Icon = "home" }),
+    FruitStatus = Window:AddTab({ Title = "Fruit Status", Icon = "apple" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+}
+
+local AutoFarm = Tabs.Main:AddToggle("AutoFarm", {Title = "Auto Farm All", Default = false })
+
+AutoFarm:OnChanged(function(Value)
+    _G.AutoFarm = Value
+    while _G.AutoFarm do
+        local plr = game.Players.LocalPlayer
+        local level = plr.Data.Level.Value
+        
+        if level < 700 then -- First Sea
+            -- First Sea Bosses and Enemies
+            for _, mob in pairs(workspace.Enemies:GetChildren()) do
+                if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
+                    repeat
+                        plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 10, 0)
+                        game:GetService("VirtualUser"):CaptureController()
+                        game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
+                        wait()
+                    until not _G.AutoFarm or mob.Humanoid.Health <= 0
+                end
+            end
+        elseif level >= 700 and level < 1500 then -- Second Sea
+            -- Second Sea Bosses and Enemies
+            for _, mob in pairs(workspace.Enemies:GetChildren()) do
+                if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
+                    repeat
+                        plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 10, 0)
+                        game:GetService("VirtualUser"):CaptureController()
+                        game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
+                        wait()
+                    until not _G.AutoFarm or mob.Humanoid.Health <= 0
+                end
+            end
+        else -- Third Sea Level Requirements
+            -- Third Sea Bosses and Enemies
+            for _, mob in pairs(workspace.Enemies:GetChildren()) do
+                if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
+                    repeat
+                        plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 10, 0)
+                        game:GetService("VirtualUser"):CaptureController()
+                        game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
+                        wait()
+                    until not _G.AutoFarm or mob.Humanoid.Health <= 0
+                end
+            end
+        end
+        wait()
+    end
+end)
