@@ -26,43 +26,184 @@ AutoFarm:OnChanged(function(Value)
         local plr = game.Players.LocalPlayer
         local level = plr.Data.Level.Value
         
+        -- Equip combat tool if any exists
+        local tool = plr.Character:FindFirstChildOfClass("Tool")
+        if not tool then
+            for _, v in pairs(plr.Backpack:GetChildren()) do
+                if v:IsA("Tool") then
+                    v.Parent = plr.Character
+                    break
+                end
+            end
+        end
+        
+        -- Quest handling function
+        local function getQuest(questNPC, questName)
+            local args = {
+                [1] = "StartQuest",
+                [2] = questNPC,
+                [3] = questName
+            }
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+        end
+        
         if level < 700 then -- First Sea
-            -- First Sea Bosses and Enemies
+            if level >= 1 and level < 10 then
+                getQuest("BanditQuest1", 1)
+            elseif level >= 10 and level < 25 then
+                getQuest("JungleQuest", 1)
+            elseif level >= 25 and level < 40 then
+                getQuest("BuggyQuest1", 1)
+            elseif level >= 40 and level < 60 then
+                getQuest("MarineQuest2", 1)
+            elseif level >= 60 and level < 75 then
+                getQuest("DesertQuest", 1)
+            elseif level >= 75 and level < 90 then
+                getQuest("SnowQuest", 1)
+            elseif level >= 90 and level < 100 then
+                getQuest("MarineQuest3", 1)
+            elseif level >= 100 and level < 120 then
+                getQuest("SkyQuest", 1)
+            elseif level >= 120 and level < 150 then
+                getQuest("CollosseumQuest", 1)
+            elseif level >= 150 and level < 175 then
+                getQuest("MagmaQuest", 1)
+            elseif level >= 175 and level < 190 then
+                getQuest("FishmanQuest", 1)
+            elseif level >= 190 and level < 250 then
+                getQuest("SkyExp2Quest", 1)
+            elseif level >= 250 and level < 300 then
+                getQuest("Military2Quest", 1)
+            elseif level >= 300 and level < 325 then
+                getQuest("MagmaQuest2", 1)
+            elseif level >= 325 and level < 375 then
+                getQuest("FishmanQuest2", 1)
+            elseif level >= 375 and level < 400 then
+                getQuest("SkyExp3Quest", 1)
+            elseif level >= 400 and level < 450 then
+                getQuest("FountainQuest", 1)
+            elseif level >= 450 and level < 475 then
+                getQuest("ShandaQuest", 1)
+            elseif level >= 475 and level < 525 then
+                getQuest("Military3Quest", 1)
+            elseif level >= 525 and level < 550 then
+                getQuest("CollosseumQuest2", 1)
+            elseif level >= 550 and level < 625 then
+                getQuest("SkyExp4Quest", 1)
+            elseif level >= 625 and level < 700 then
+                getQuest("FountainQuest2", 1)
+            end
+            
             for _, mob in pairs(workspace.Enemies:GetChildren()) do
                 if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
                     repeat
                         plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 10, 0)
                         game:GetService("VirtualUser"):CaptureController()
-                        game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
-                        wait()
+                        for i = 1, 10 do
+                            game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
+                            if plr.Character:FindFirstChildOfClass("Tool") then
+                                plr.Character:FindFirstChildOfClass("Tool"):Activate()
+                            end
+                        end
                     until not _G.AutoFarm or mob.Humanoid.Health <= 0
                 end
             end
         elseif level >= 700 and level < 1500 then -- Second Sea
-            -- Second Sea Bosses and Enemies
+            if level >= 700 and level < 725 then
+                getQuest("Area1Quest", 1)
+            elseif level >= 725 and level < 775 then
+                getQuest("Area2Quest", 1)
+            elseif level >= 775 and level < 800 then
+                getQuest("Area3Quest", 1)
+            elseif level >= 800 and level < 875 then
+                getQuest("MarineQuest3", 2)
+            elseif level >= 875 and level < 900 then
+                getQuest("PortQuest", 1)
+            elseif level >= 900 and level < 950 then
+                getQuest("ChocQuest1", 1)
+            elseif level >= 950 and level < 975 then
+                getQuest("ChocQuest2", 1)
+            elseif level >= 975 and level < 1000 then
+                getQuest("SnowMountainQuest", 1)
+            elseif level >= 1000 and level < 1050 then
+                getQuest("MarineQuest3", 2)
+            elseif level >= 1050 and level < 1100 then
+                getQuest("IceSideQuest", 1)
+            elseif level >= 1100 and level < 1125 then
+                getQuest("FrostQuest", 1)
+            elseif level >= 1125 and level < 1175 then
+                getQuest("HauntedQuest1", 1)
+            elseif level >= 1175 and level < 1200 then
+                getQuest("HauntedQuest2", 1)
+            elseif level >= 1200 and level < 1250 then
+                getQuest("HauntedQuest3", 1)
+            elseif level >= 1250 and level < 1300 then
+                getQuest("IceCreamIslandQuest", 1)
+            elseif level >= 1300 and level < 1350 then
+                getQuest("CakeQuest1", 1)
+            elseif level >= 1350 and level < 1425 then
+                getQuest("CakeQuest2", 1)
+            elseif level >= 1425 and level < 1500 then
+                getQuest("ChocQuest3", 1)
+            end
+            
             for _, mob in pairs(workspace.Enemies:GetChildren()) do
                 if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
                     repeat
                         plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 10, 0)
                         game:GetService("VirtualUser"):CaptureController()
-                        game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
-                        wait()
+                        for i = 1, 10 do
+                            game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
+                            if plr.Character:FindFirstChildOfClass("Tool") then
+                                plr.Character:FindFirstChildOfClass("Tool"):Activate()
+                            end
+                        end
                     until not _G.AutoFarm or mob.Humanoid.Health <= 0
                 end
             end
-        else -- Third Sea Level Requirements
-            -- Third Sea Bosses and Enemies
+        else -- Third Sea
+            if level >= 1500 and level < 1525 then
+                getQuest("PiratePortQuest", 1)
+            elseif level >= 1525 and level < 1575 then
+                getQuest("AmazonQuest", 1)
+            elseif level >= 1575 and level < 1600 then
+                getQuest("AmazonQuest2", 1)
+            elseif level >= 1600 and level < 1625 then
+                getQuest("MarineTreeIsland", 1)
+            elseif level >= 1625 and level < 1650 then
+                getQuest("DeepForestIsland", 1)
+            elseif level >= 1650 and level < 1700 then
+                getQuest("DeepForestIsland2", 1)
+            elseif level >= 1700 and level < 1725 then
+                getQuest("GraveIslandQuest", 1)
+            elseif level >= 1725 and level < 1775 then
+                getQuest("NutsIslandQuest", 1)
+            elseif level >= 1775 and level < 1800 then
+                getQuest("IceCreamIslandQuest", 2)
+            elseif level >= 1800 and level < 1825 then
+                getQuest("PeanutQuest1", 1)
+            elseif level >= 1825 and level < 1850 then
+                getQuest("PeanutQuest2", 1)
+            elseif level >= 1850 and level < 1900 then
+                getQuest("CakeQuest", 2)
+            elseif level >= 1900 then
+                getQuest("ChocQuest", 2)
+            end
+            
             for _, mob in pairs(workspace.Enemies:GetChildren()) do
                 if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
                     repeat
                         plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 10, 0)
                         game:GetService("VirtualUser"):CaptureController()
-                        game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
-                        wait()
+                        for i = 1, 10 do
+                            game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
+                            if plr.Character:FindFirstChildOfClass("Tool") then
+                                plr.Character:FindFirstChildOfClass("Tool"):Activate()
+                            end
+                        end
                     until not _G.AutoFarm or mob.Humanoid.Health <= 0
                 end
             end
         end
-        wait()
     end
 end)
